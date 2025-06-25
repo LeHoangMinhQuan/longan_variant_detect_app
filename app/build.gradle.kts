@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -16,6 +17,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    tasks.withType<JavaCompile> {
+        options.compilerArgs.add("-Xlint:deprecation")
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -26,8 +31,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     buildFeatures {
         viewBinding = true
@@ -44,6 +49,24 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.legacy.support.v4)
+    implementation(libs.activity)
+// Firebase BoM (manages versions of all Firebase libraries below)
+    implementation(libs.firebase.bom)
+
+    // Firebase libraries (versionless when using BoM)
+    implementation(libs.google.firebase.auth)
+    // Ignore no version in AndroidTest
+    androidTestImplementation(libs.firebase.auth)
+
+    // FirebaseUI still requires explicit version
+    implementation(libs.firebase.ui.auth)
+
+    // Credential Manager support for FirebaseUI 8+
+    implementation(libs.credentials.play.services.auth)
+
+    // Optional: Google Sign-In ID (if used explicitly elsewhere)
+    implementation(libs.googleid)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
