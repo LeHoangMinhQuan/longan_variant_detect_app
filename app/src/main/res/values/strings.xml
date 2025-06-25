@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Phân loại nhãn</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_login">LogInActivity</string>
     <string name="title_home">Home</string>
     <string name="title_profile"> Profile</string>
     <string name="title_history"> History</string>
@@ -8,4 +9,6 @@
     <string name="title_notifications">Notifications</string>
     <string name="fab_cam_des">Chụp ảnh</string>
     <string name="fab_add_des">Tải ảnh lên</string>
+    <string name="default_web_client_id">87450574837-qcoo6rrnv5nsj6c4i5i04lcrg90mtvkq.apps.googleusercontent.com</string>
+    <string name="logout_title">Đăng  x</string>
 </resources>

@@ -9,4 +9,5 @@
     <color name="white">#FFFFFF</color>
     <color name="plant_green">#3CDC42</color>
     <color name="bold_green">#1C9221</color>
+    <color name="material_dynamic_neutral30">#45464C</color>
 </resources>
