@@ -105,7 +105,9 @@ public class ActivityLogin extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         moveToMain(mAuth.getCurrentUser());
                     } else {
-                        Toast.makeText(this, "Login failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Đăng nhập thất bại. Vui lòng kiểm tra lại email hoặc mật khẩu.", Toast.LENGTH_LONG).show();
+                        // ***** For development, not allowed in production
+                        Log.e("login", "Login failed: " + task.getException().getMessage());
                     }
                 });
     }
@@ -121,7 +123,9 @@ public class ActivityLogin extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         moveToMain(mAuth.getCurrentUser());
                     } else {
-                        Toast.makeText(this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Đăng ký thất bại. Vui lòng kiểm tra lại email hoặc mật khẩu.", Toast.LENGTH_LONG).show();
+                        // ***** For development, not allowed in production
+                        Log.e("signin", "Registration failed: " + task.getException().getMessage());
                     }
                 });
     }
