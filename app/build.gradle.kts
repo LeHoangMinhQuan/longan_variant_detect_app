@@ -19,6 +19,7 @@ android {
 
     tasks.withType<JavaCompile> {
         options.compilerArgs.add("-Xlint:deprecation")
+
     }
 
     buildTypes {
@@ -63,6 +64,9 @@ dependencies {
 
     // Credential Manager support for FirebaseUI 8+
     implementation(libs.credentials.play.services.auth)
+
+    // Also add the dependency for the Google Play services library and specify its version
+    implementation(libs.play.services.auth)
 
     // Optional: Google Sign-In ID (if used explicitly elsewhere)
     implementation(libs.googleid)
