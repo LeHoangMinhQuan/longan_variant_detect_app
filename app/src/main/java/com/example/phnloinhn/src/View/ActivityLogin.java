@@ -16,14 +16,20 @@ import com.example.phnloinhn.R;
 import com.example.phnloinhn.databinding.ActivityLoginBinding;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
+import com.firebase.ui.auth.FirebaseUiException;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.appcheck.FirebaseAppCheck;
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+
+import com.example.phnloinhn.src.Helper.LogInHelper;
 
 public class ActivityLogin extends AppCompatActivity {
 
@@ -42,6 +48,13 @@ public class ActivityLogin extends AppCompatActivity {
             return insets;
         });
 
+        // Initialize Firebase Play App Check for verify requests to Firebase
+        FirebaseApp.initializeApp(/*context=*/ this);
+        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+        firebaseAppCheck.installAppCheckProviderFactory(
+                PlayIntegrityAppCheckProviderFactory.getInstance());
+
+        // Initialize Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
 
         // If user logged in, move to main
@@ -105,9 +118,17 @@ public class ActivityLogin extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         moveToMain(mAuth.getCurrentUser());
                     } else {
-                        Toast.makeText(this, "Đăng nhập thất bại. Vui lòng kiểm tra lại email hoặc mật khẩu.", Toast.LENGTH_LONG).show();
-                        // ***** For development, not allowed in production
-                        Log.e("login", "Login failed: " + task.getException().getMessage());
+                        Exception e = task.getException();
+                        if (e instanceof FirebaseAuthException) {
+                            String errorCode = ((FirebaseAuthException) e).getErrorCode();
+                            String message = LogInHelper.PASSWORD_MSGS.getOrDefault(errorCode, "Lỗi không xác định.");
+                            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                            Log.e("FirebaseError", "Code: " + errorCode + ", Message: " + message);
+                        } else {
+                            assert e != null;
+                            Toast.makeText(this, "Đã xảy ra lỗi: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Log.e("FirebaseError", "Exception: ", e);
+                        }
                     }
                 });
     }
@@ -123,9 +144,17 @@ public class ActivityLogin extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         moveToMain(mAuth.getCurrentUser());
                     } else {
-                        Toast.makeText(this, "Đăng ký thất bại. Vui lòng kiểm tra lại email hoặc mật khẩu.", Toast.LENGTH_LONG).show();
-                        // ***** For development, not allowed in production
-                        Log.e("signin", "Registration failed: " + task.getException().getMessage());
+                        Exception e = task.getException();
+                        if (e instanceof FirebaseAuthException) {
+                            String errorCode = ((FirebaseAuthException) e).getErrorCode();
+                            String message = LogInHelper.PASSWORD_MSGS.getOrDefault(errorCode, "Lỗi không xác định.");
+                            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                            Log.e("FirebaseError", "Code: " + errorCode + ", Message: " + message);
+                        } else {
+                            assert e != null;
+                            Toast.makeText(this, "Đã xảy ra lỗi: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Log.e("FirebaseError", "Exception: ", e);
+                        }
                     }
                 });
     }
@@ -166,10 +195,19 @@ public class ActivityLogin extends AppCompatActivity {
             moveToMain(user);
         } else {
             if (response == null) {
-                Toast.makeText(this, "Sign-in cancelled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Đăng nhập bị hủy hoặc email này đã có tài khoản.", Toast.LENGTH_SHORT).show();
             } else {
-                Log.e("Login", "Error: " + response.getError());
-                Toast.makeText(this, "Sign-in error: " + Objects.requireNonNull(response.getError()).getMessage(), Toast.LENGTH_LONG).show();
+                FirebaseUiException error = response.getError();
+                if (error != null) {
+                    Integer errorCode = error.getErrorCode();
+                    String message = LogInHelper.GOOGLEUI_MSGS.getOrDefault(errorCode, "Đã xảy ra lỗi: " + error.getLocalizedMessage());
+                    Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                    Log.e("Login", "Error code: " + errorCode + ", message: " + message);
+                } else {
+                    // Unknown error
+                    Toast.makeText(this, "Đã xảy ra lỗi chưa xác định.", Toast.LENGTH_LONG).show();
+                    Log.e("Login", "Unknown error with null FirebaseUiException");
+                }
             }
         }
     }

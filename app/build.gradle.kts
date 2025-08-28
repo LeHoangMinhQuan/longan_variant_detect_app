@@ -51,24 +51,30 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.legacy.support.v4)
     implementation(libs.activity)
-// Firebase BoM (manages versions of all Firebase libraries below)
-    implementation(libs.firebase.bom)
+    // Firebase BoM (manages versions of all Firebase libraries below)
+    implementation(platform(libs.firebase.bom))
 
-    // Firebase libraries (versionless when using BoM)
+    // Firebase libraries
     implementation(libs.google.firebase.auth)
     // Ignore no version in AndroidTest
     androidTestImplementation(libs.firebase.auth)
 
-    // FirebaseUI still requires explicit version
+    // Add the dependencies for the App Check libraries
+    implementation(libs.firebase.appcheck.playintegrity)
+
+    // FirebaseUI
     implementation(libs.firebase.ui.auth)
+
+    // Firestore
+    implementation(libs.firebase.firestore)
 
     // Credential Manager support for FirebaseUI 8+
     implementation(libs.credentials.play.services.auth)
 
-    // Also add the dependency for the Google Play services library and specify its version
+    // Dependency for the Google Play services library
     implementation(libs.play.services.auth)
 
-    // Optional: Google Sign-In ID (if used explicitly elsewhere)
+    // Google Sign-In ID (if used explicitly elsewhere)
     implementation(libs.googleid)
 
     testImplementation(libs.junit)
