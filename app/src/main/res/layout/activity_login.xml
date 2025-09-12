@@ -76,7 +76,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/signin_button"
+                android:id="@+id/signup_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -91,6 +91,7 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:text="Mật khẩu cần có tối thiểu 8 ký tự, với chữ in hoa, số và ký tự đặc biệt như !, @, #,..." />
 
             <Button

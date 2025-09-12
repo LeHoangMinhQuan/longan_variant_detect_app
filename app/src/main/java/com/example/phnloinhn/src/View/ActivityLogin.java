@@ -67,14 +67,21 @@ public class ActivityLogin extends AppCompatActivity {
         binding.loginButton.setOnClickListener(v -> {
             String email = binding.editTextUsername.getText().toString().trim();
             String password = binding.editTextPassword.getText().toString().trim();
-            loginUser(email, password);
+            if (validateCredentials(email, password) == 1){
+                // Show warning above email editText
+
+            }
+            else if (validateCredentials(email, password) == 2) {
+                // Show warning above password editText
+            } else loginUser(email, password);
         });
 
-        binding.signinButton.setOnClickListener(v -> {
+        binding.signupButton.setOnClickListener(v -> {
             String email = binding.editTextUsername.getText().toString().trim();
             String password = binding.editTextPassword.getText().toString().trim();
             if (validateCredentials(email, password) == 1){
                 // Show warning above email editText
+
             }
             else if (validateCredentials(email, password) == 2) {
                 // Show warning above password editText
