@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
@@ -50,23 +49,25 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.legacy.support.v4)
     implementation(libs.activity)
-// Firebase BoM (manages versions of all Firebase libraries below)
+
+    // Firebase
     implementation(libs.firebase.bom)
-
-    // Firebase libraries (versionless when using BoM)
     implementation(libs.google.firebase.auth)
-    // Ignore no version in AndroidTest
     androidTestImplementation(libs.firebase.auth)
-
-    // FirebaseUI still requires explicit version
     implementation(libs.firebase.ui.auth)
-
-    // Credential Manager support for FirebaseUI 8+
     implementation(libs.credentials.play.services.auth)
-
-    // Optional: Google Sign-In ID (if used explicitly elsewhere)
     implementation(libs.googleid)
 
+    // TensorFlow Lite core
+    implementation("org.tensorflow:tensorflow-lite:2.14.0")
+    // TensorFlow Lite Support (cho tensor, xử lý ảnh…)
+    implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
+    // TensorFlow Lite Metadata (đọc metadata của model)
+    implementation("org.tensorflow:tensorflow-lite-metadata:0.4.4")
+    // Nếu cần GPU delegate
+    implementation("org.tensorflow:tensorflow-lite-gpu:2.14.0")
+
+    // Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
