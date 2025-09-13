@@ -55,6 +55,7 @@ dependencies {
 
     // Firebase libraries
     implementation(libs.google.firebase.auth)
+    implementation(libs.google.firebase.firestore)
     // Ignore no version in AndroidTest
     androidTestImplementation(libs.firebase.auth)
 
