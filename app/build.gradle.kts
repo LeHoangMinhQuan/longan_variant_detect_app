@@ -19,7 +19,6 @@ android {
 
     tasks.withType<JavaCompile> {
         options.compilerArgs.add("-Xlint:deprecation")
-
     }
 
     buildTypes {
@@ -77,6 +76,16 @@ dependencies {
     // Google Sign-In ID (if used explicitly elsewhere)
     implementation(libs.googleid)
 
+    // TensorFlow Lite core
+    implementation(libs.tensorflow.lite)
+    // TensorFlow Lite Support (for tensor, image processing…)
+    implementation(libs.tensorflow.lite.support)
+    // TensorFlow Lite Metadata (read model metadata)
+    implementation(libs.tensorflow.lite.metadata)
+    // For GPU delegate
+    implementation(libs.tensorflow.lite.gpu)
+
+    // Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
