@@ -24,7 +24,7 @@ public class MobilenetClassifier {
     private String modelPath;
     private String labelPath;
     private List<String> labelList;
-    private int inputSize = 32;
+    private int inputSize = 224;
     private Interpreter interpreter;
 
     public MobilenetClassifier(AssetManager assetManager, String modelPath, String labelPath, int inputSize) {
@@ -94,27 +94,35 @@ public class MobilenetClassifier {
         return null;
     }
 
-    private static ByteBuffer comvertBitmapToByteBuffer(Bitmap bitmap, int INPUT_SIZE, float IMAGE_MEAN, float IMAGE_STD) {
-        bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
+    private static ByteBuffer convertBitmapToByteBuffer(Bitmap bitmap, int inputSize) {
+        bitmap = Bitmap.createScaledBitmap(bitmap, inputSize, inputSize, false);
 
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * INPUT_SIZE * INPUT_SIZE * 3);
+        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * inputSize * inputSize * 3);
         byteBuffer.order(ByteOrder.nativeOrder());
-        int[] intValues = new int[INPUT_SIZE * INPUT_SIZE];
+        int[] intValues = new int[inputSize * inputSize];
 
         bitmap.getPixels(intValues, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+
         int pixel = 0;
-        for (int i = 0; i < INPUT_SIZE; i++) {
-            for (int j = 0; j < INPUT_SIZE; j++) {
+        for (int i = 0; i < inputSize; i++) {
+            for (int j = 0; j < inputSize; j++) {
                 int input = intValues[pixel++];
-                byteBuffer.putFloat(((input >> 16 & 0xFF) - IMAGE_MEAN) / IMAGE_STD); // Red
-                byteBuffer.putFloat(((input >> 8 & 0xFF) - IMAGE_MEAN) / IMAGE_STD);  // Green
-                byteBuffer.putFloat(((input & 0xFF) - IMAGE_MEAN) / IMAGE_STD);       // Blue
+
+                // Normalize to [-1, 1] just like tf.keras.applications.mobilenet_v3.preprocess_input
+                float r = ((input >> 16) & 0xFF) / 127.5f - 1.0f;
+                float g = ((input >> 8) & 0xFF) / 127.5f - 1.0f;
+                float b = (input & 0xFF) / 127.5f - 1.0f;
+
+                byteBuffer.putFloat(r);
+                byteBuffer.putFloat(g);
+                byteBuffer.putFloat(b);
             }
         }
         return byteBuffer;
     }
+
     public List<Recognition> classify(Bitmap bitmap) {
-        ByteBuffer input = comvertBitmapToByteBuffer(bitmap, inputSize, 127.5f, 127.5f);
+        ByteBuffer input = convertBitmapToByteBuffer(bitmap, inputSize);
 
         float[][] output = new float[1][labelList.size()];
         interpreter.run(input, output);
@@ -124,8 +132,9 @@ public class MobilenetClassifier {
             recognitions.add(new Recognition("" + i, labelList.get(i), output[0][i]));
         }
 
-        // Sắp xếp giảm dần theo confidence
+        // Sort descending by confidence
         Collections.sort(recognitions, (r1, r2) -> Float.compare(r2.confidence, r1.confidence));
         return recognitions;
     }
+
 }
