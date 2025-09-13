@@ -2,22 +2,28 @@ package com.example.phnloinhn.src.View;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.phnloinhn.R;
-
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.phnloinhn.R;
 import com.example.phnloinhn.databinding.ActivityMainBinding;
+import com.example.phnloinhn.src.ml.MobilenetClassifier;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,14 +35,20 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.io.IOException;
+import java.util.List;
+
 public class ActivityMain extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private FirebaseFirestore db;
     private Map<String, Object> longan_data; // <Variant names, Variant details>
+    private MobilenetClassifier classifier;
+
+    private ActivityResultLauncher<Intent> pickImageLauncher;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -86,34 +98,77 @@ public class ActivityMain extends AppCompatActivity {
 
         // Initialize toolbar
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar); // Replace ActionBar with Toolbar
+        setSupportActionBar(toolbar);
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_fragmentHistory, R.id.nav_fragmentHome, R.id.nav_fragmentProfile)
-                .build();
-        // Initialize navHostFragment to prevent it's not fully attached
-        // in the lifecycle
+                R.id.nav_fragmentHistory, R.id.nav_fragmentHome, R.id.nav_fragmentProfile
+        ).build();
+
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+
         NavController navController = null;
         if (navHostFragment != null) {
             navController = navHostFragment.getNavController();
-        } else Log.e("Main Activity", "navHostFragment is null");
-
+        } else {
+            Log.e("Main Activity", "navHostFragment is null");
+        }
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
+
+        // Khởi tạo classifier
+        classifier = new MobilenetClassifier(getAssets(), "model.tflite", "labels.txt", 224);
+        try {
+            classifier.init();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // ActivityResultLauncher thay cho startActivityForResult
+        pickImageLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri imageUri = result.getData().getData();
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+
+                            // Chạy AI
+                            List<MobilenetClassifier.Recognition> predictions = classifier.classify(bitmap);
+
+                            if (!predictions.isEmpty()) {
+                                MobilenetClassifier.Recognition topResult = predictions.get(0);
+                                Toast.makeText(this, "Kết quả: " + topResult.getTitle() + " (" + topResult.getConfidence() + ")", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(this, "Không dự đoán được", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(this, "Không đọc được ảnh", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+        );
+
+        // ✅ Khi bấm fabAdd thì mở thư viện ảnh
+        binding.fabAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            pickImageLauncher.launch(Intent.createChooser(intent, "Chọn ảnh"));
+        });
     }
 
+    // menu trên toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
     }
 
+    // xử lý khi bấm menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -129,7 +184,8 @@ public class ActivityMain extends AppCompatActivity {
         }
     }
 
-    protected void logOut(){
+    // logout firebase
+    protected void logOut() {
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<>() {
