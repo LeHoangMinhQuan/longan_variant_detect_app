@@ -3,6 +3,9 @@ package com.example.phnloinhn.src.ml;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import org.tensorflow.lite.Interpreter;
 
@@ -15,8 +18,10 @@ import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Collections;
+import java.util.Objects;
 
 public class MobilenetClassifier {
 
@@ -44,6 +49,7 @@ public class MobilenetClassifier {
             this.confidence = confidence;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "Pred:{" +
@@ -65,7 +71,7 @@ public class MobilenetClassifier {
         options.setNumThreads(5);
         options.setUseNNAPI(true);
 
-        interpreter = new Interpreter(loadModelFile(assetManager, modelPath), options);
+        interpreter = new Interpreter(Objects.requireNonNull(loadModelFile(assetManager, modelPath)), options);
         labelList = loadLabelList(assetManager, labelPath);
     }
 
@@ -128,9 +134,6 @@ public class MobilenetClassifier {
         List<Recognition> recognitions = new ArrayList<>();
         for (int i = 0; i < labelList.size(); i++) {
             recognitions.add(new Recognition("" + i, labelList.get(i), output[0][i]));
-        }
-        for (int i = 0; i < output[0].length; i++) {
-            android.util.Log.d("TFLITE_RAW", labelList.get(i) + ": " + output[0][i]);
         }
 
         // Sort descending by confidence
