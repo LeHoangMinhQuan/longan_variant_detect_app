@@ -1,97 +1,131 @@
 package com.example.phnloinhn.src.ml;
 
-import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 
 import org.tensorflow.lite.Interpreter;
-import org.tensorflow.lite.gpu.GpuDelegate;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Collections;
 
 public class MobilenetClassifier {
 
-    private static final int IMAGE_SIZE = 224; // chỉnh theo input model
+    private AssetManager assetManager;
+    private String modelPath;
+    private String labelPath;
+    private List<String> labelList;
+    private int inputSize = 32;
     private Interpreter interpreter;
-    private GpuDelegate gpuDelegate;
 
-    public MobilenetClassifier(Context context, String modelPath) throws IOException {
-        MappedByteBuffer model = loadModelFile(context, modelPath);
+    public MobilenetClassifier(AssetManager assetManager, String modelPath, String labelPath, int inputSize) {
+        this.assetManager = assetManager;
+        this.modelPath = modelPath;
+        this.labelPath = labelPath;
+        this.inputSize = inputSize;
+    }
+    public static class Recognition {
+        private String id = "";
+        private String title = "";
+        private float confidence = 0f;
+
+        public Recognition(String id, String title, float confidence) {
+            this.id = id;
+            this.title = title;
+            this.confidence = confidence;
+        }
+
+        @Override
+        public String toString() {
+            return "Pred:{" +
+                    "title=" + title +
+                    ", confidence=" + confidence +
+                    '}';
+        }
+        public String getTitle() {
+            return title;
+        }
+
+        public float getConfidence() {
+            return confidence;
+        }
+    }
+
+    public void init() throws IOException {
         Interpreter.Options options = new Interpreter.Options();
-        options.setNumThreads(4);
+        options.setNumThreads(5);
+        options.setUseNNAPI(true);
+
+        interpreter = new Interpreter(loadModelFile(assetManager, modelPath), options);
+        labelList = loadLabelList(assetManager, labelPath);
+    }
+
+    private List<String> loadLabelList(AssetManager assetManager, String labelPath) throws IOException {
+        List<String> labelList = new ArrayList<>();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(assetManager.open(labelPath)));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            labelList.add(line);
+        }
+        reader.close();
+        return labelList;
+    }
+
+    private static MappedByteBuffer loadModelFile(AssetManager assetManager, String modelPath) {
         try {
-            gpuDelegate = new GpuDelegate();
-            options.addDelegate(gpuDelegate);
-        } catch (Exception e) {
-            gpuDelegate = null; // fallback CPU
+            AssetFileDescriptor fileDescriptor = assetManager.openFd(modelPath);
+            FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
+            FileChannel fileChannel = inputStream.getChannel();
+            long startOffset = fileDescriptor.getStartOffset();
+            long declaredLength = fileDescriptor.getDeclaredLength();
+            return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        interpreter = new Interpreter(model, options);
+        return null;
     }
 
-    private MappedByteBuffer loadModelFile(Context context, String path) throws IOException {
-        AssetFileDescriptor afd = context.getAssets().openFd(path);
-        FileInputStream fis = new FileInputStream(afd.getFileDescriptor());
-        FileChannel fileChannel = fis.getChannel();
-        long startOffset = afd.getStartOffset();
-        long declaredLength = afd.getDeclaredLength();
-        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
-    }
+    private static ByteBuffer comvertBitmapToByteBuffer(Bitmap bitmap, int INPUT_SIZE, float IMAGE_MEAN, float IMAGE_STD) {
+        bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
 
-    private ByteBuffer preprocess(Bitmap bitmap) {
-        Bitmap bmp = Bitmap.createScaledBitmap(bitmap, IMAGE_SIZE, IMAGE_SIZE, true);
-        ByteBuffer bb = ByteBuffer.allocateDirect(4 * IMAGE_SIZE * IMAGE_SIZE * 3);
-        bb.order(ByteOrder.nativeOrder());
-        int[] intValues = new int[IMAGE_SIZE * IMAGE_SIZE];
-        bmp.getPixels(intValues, 0, IMAGE_SIZE, 0, 0, IMAGE_SIZE, IMAGE_SIZE);
+        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * INPUT_SIZE * INPUT_SIZE * 3);
+        byteBuffer.order(ByteOrder.nativeOrder());
+        int[] intValues = new int[INPUT_SIZE * INPUT_SIZE];
 
-        for (int px : intValues) {
-            int r = (px >> 16) & 0xFF;
-            int g = (px >> 8) & 0xFF;
-            int b = px & 0xFF;
-            // CHÚ Ý: chỉnh lại nếu model yêu cầu [-1,1] thay vì [0,1]
-            bb.putFloat(r / 255.0f);
-            bb.putFloat(g / 255.0f);
-            bb.putFloat(b / 255.0f);
-        }
-        bb.rewind();
-        return bb;
-    }
-
-    public float[] predict(Bitmap bitmap) {
-        ByteBuffer input = preprocess(bitmap);
-        int outSize = interpreter.getOutputTensor(0).shape()[1]; // [1, numClasses]
-        float[][] output = new float[1][outSize];
-        interpreter.run(input, output);
-        return output[0];
-    }
-
-    public List<int[]> topK(float[] results, int k) {
-        List<int[]> pairs = new ArrayList<>();
-        for (int i = 0; i < results.length; i++) {
-            pairs.add(new int[]{i, Float.floatToIntBits(results[i])});
-        }
-        Collections.sort(pairs, new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                float v1 = Float.intBitsToFloat(o1[1]);
-                float v2 = Float.intBitsToFloat(o2[1]);
-                return Float.compare(v2, v1); // desc
+        bitmap.getPixels(intValues, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+        int pixel = 0;
+        for (int i = 0; i < INPUT_SIZE; i++) {
+            for (int j = 0; j < INPUT_SIZE; j++) {
+                int input = intValues[pixel++];
+                byteBuffer.putFloat(((input >> 16 & 0xFF) - IMAGE_MEAN) / IMAGE_STD); // Red
+                byteBuffer.putFloat(((input >> 8 & 0xFF) - IMAGE_MEAN) / IMAGE_STD);  // Green
+                byteBuffer.putFloat(((input & 0xFF) - IMAGE_MEAN) / IMAGE_STD);       // Blue
             }
-        });
-        return pairs.subList(0, Math.min(k, pairs.size()));
+        }
+        return byteBuffer;
     }
+    public List<Recognition> classify(Bitmap bitmap) {
+        ByteBuffer input = comvertBitmapToByteBuffer(bitmap, inputSize, 127.5f, 127.5f);
 
-    public void close() {
-        if (interpreter != null) interpreter.close();
-        if (gpuDelegate != null) gpuDelegate.close();
+        float[][] output = new float[1][labelList.size()];
+        interpreter.run(input, output);
+
+        List<Recognition> recognitions = new ArrayList<>();
+        for (int i = 0; i < labelList.size(); i++) {
+            recognitions.add(new Recognition("" + i, labelList.get(i), output[0][i]));
+        }
+
+        // Sắp xếp giảm dần theo confidence
+        Collections.sort(recognitions, (r1, r2) -> Float.compare(r2.confidence, r1.confidence));
+        return recognitions;
     }
 }

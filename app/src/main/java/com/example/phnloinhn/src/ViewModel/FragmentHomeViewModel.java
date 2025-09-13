@@ -26,8 +26,13 @@ public class FragmentHomeViewModel extends AndroidViewModel {
     public FragmentHomeViewModel(@NonNull Application application) {
         super(application);
         try {
-            // nạp model từ thư mục assets
-            classifier = new MobilenetClassifier(application.getApplicationContext(), "mobilenetv3.tflite");
+            classifier = new MobilenetClassifier(
+                    application.getAssets(),
+                    "mobilenetv3.tflite",
+                    "label.txt",
+                    32
+            );
+            classifier.init();
         } catch (IOException e) {
             throw new RuntimeException("Không thể load MobileNet model", e);
         }
@@ -39,11 +44,11 @@ public class FragmentHomeViewModel extends AndroidViewModel {
 
     public void classify(Bitmap bitmap) {
         Executors.newSingleThreadExecutor().execute(() -> {
-            float[] preds = classifier.predict(bitmap);
+            List<MobilenetClassifier.Recognition> preds = classifier.classify(bitmap);
             List<Pair<Integer, Float>> scores = new ArrayList<>();
 
-            for (int i = 0; i < preds.length; i++) {
-                scores.add(new Pair<>(i, preds[i]));
+            for (int i = 0; i < preds.size(); i++) {
+                scores.add(new Pair<>(i, preds.get(i).getConfidence()));
             }
 
             // sắp xếp từ cao đến thấp
@@ -57,6 +62,7 @@ public class FragmentHomeViewModel extends AndroidViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        classifier.close();
+        // Nếu bạn có method close() trong classifier
+        // classifier.close();
     }
 }
