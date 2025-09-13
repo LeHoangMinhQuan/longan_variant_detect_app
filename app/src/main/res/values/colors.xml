@@ -10,4 +10,6 @@
     <color name="plant_green">#3CDC42</color>
     <color name="bold_green">#1C9221</color>
     <color name="material_dynamic_neutral30">#45464C</color>
+    <color name="table_item_color">#80C4E0C4</color>
+    <color name="button_color">#2a6f1e</color>
 </resources>

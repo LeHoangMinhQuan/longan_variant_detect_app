@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
@@ -49,23 +50,40 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.legacy.support.v4)
     implementation(libs.activity)
+    // Firebase BoM (manages versions of all Firebase libraries below)
+    implementation(platform(libs.firebase.bom))
 
-    // Firebase
-    implementation(libs.firebase.bom)
+    // Firebase libraries
     implementation(libs.google.firebase.auth)
+    // Ignore no version in AndroidTest
     androidTestImplementation(libs.firebase.auth)
+
+    // Add the dependencies for the App Check libraries
+    implementation(libs.firebase.appcheck.playintegrity)
+
+    // FirebaseUI
     implementation(libs.firebase.ui.auth)
+
+    // Firestore
+    implementation(libs.firebase.firestore)
+
+    // Credential Manager support for FirebaseUI 8+
     implementation(libs.credentials.play.services.auth)
+
+    // Dependency for the Google Play services library
+    implementation(libs.play.services.auth)
+
+    // Google Sign-In ID (if used explicitly elsewhere)
     implementation(libs.googleid)
 
     // TensorFlow Lite core
-    implementation("org.tensorflow:tensorflow-lite:2.14.0")
-    // TensorFlow Lite Support (cho tensor, xử lý ảnh…)
-    implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
-    // TensorFlow Lite Metadata (đọc metadata của model)
-    implementation("org.tensorflow:tensorflow-lite-metadata:0.4.4")
-    // Nếu cần GPU delegate
-    implementation("org.tensorflow:tensorflow-lite-gpu:2.14.0")
+    implementation(libs.tensorflow.lite)
+    // TensorFlow Lite Support (for tensor, image processing…)
+    implementation(libs.tensorflow.lite.support)
+    // TensorFlow Lite Metadata (read model metadata)
+    implementation(libs.tensorflow.lite.metadata)
+    // For GPU delegate
+    implementation(libs.tensorflow.lite.gpu)
 
     // Test
     testImplementation(libs.junit)
