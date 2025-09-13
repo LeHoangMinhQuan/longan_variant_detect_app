@@ -134,8 +134,9 @@ public class ActivityMain extends AppCompatActivity {
                         Uri imageUri = result.getData().getData();
                         try {
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-
+                            Log.d("TFLITE_RAW","Classify from ActivityMain");
                             // Chạy AI
+
                             List<MobilenetClassifier.Recognition> predictions = classifier.classify(bitmap);
 
                             if (!predictions.isEmpty()) {

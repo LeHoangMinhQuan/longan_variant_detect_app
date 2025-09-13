@@ -108,11 +108,9 @@ public class MobilenetClassifier {
             for (int j = 0; j < inputSize; j++) {
                 int input = intValues[pixel++];
 
-                // Normalize to [-1, 1] just like tf.keras.applications.mobilenet_v3.preprocess_input
-                float r = ((input >> 16) & 0xFF) / 127.5f - 1.0f;
-                float g = ((input >> 8) & 0xFF) / 127.5f - 1.0f;
-                float b = (input & 0xFF) / 127.5f - 1.0f;
-
+                float r = ((input >> 16) & 0xFF);
+                float g = ((input >> 8) & 0xFF);
+                float b = (input & 0xFF);
                 byteBuffer.putFloat(r);
                 byteBuffer.putFloat(g);
                 byteBuffer.putFloat(b);
@@ -130,6 +128,9 @@ public class MobilenetClassifier {
         List<Recognition> recognitions = new ArrayList<>();
         for (int i = 0; i < labelList.size(); i++) {
             recognitions.add(new Recognition("" + i, labelList.get(i), output[0][i]));
+        }
+        for (int i = 0; i < output[0].length; i++) {
+            android.util.Log.d("TFLITE_RAW", labelList.get(i) + ": " + output[0][i]);
         }
 
         // Sort descending by confidence
