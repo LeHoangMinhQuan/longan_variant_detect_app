@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Phân loại nhãn</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_login">LogInActivity</string>
+    <string name="title_home">Trang chủ</string>
+    <string name="title_profile"> Hồ sơ</string>
+    <string name="title_history">Lịch sử</string>
+    <string name="title_notifications">Thông báo</string>
+    <string name="fab_cam_des">Chụp ảnh</string>
+    <string name="fab_add_des">Tải ảnh lên</string>
+    <string name="default_web_client_id">87450574837-qcoo6rrnv5nsj6c4i5i04lcrg90mtvkq.apps.googleusercontent.com</string>
+    <string name="logout_title">Đăng xuất</string>
+    <string name="email_hint">Nhập email</string>
+    <string name="password_hint">Nhập mật khẩu</string>
+    <string name="login_title">Đăng nhập</string>
+    <string name="signin_title">Đăng ký</string>
+    <string name="other_login_title">Đăng nhập với Google hoặc Khách</string>
+    <string name="forgot_password_text">Quên mật khẩu?</string>
+</resources>
