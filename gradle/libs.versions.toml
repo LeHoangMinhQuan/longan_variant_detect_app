@@ -19,7 +19,6 @@ googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.2.1"
 googleid = "1.1.1"
 playServicesAuth = "21.3.0"
-playServicesAuthApiCredentials = "1.5.0"
 tensorflowLite = "2.14.0"
 tensorflowLiteGpu = "2.14.0"
 tensorflowLiteMetadata = "0.4.4"
@@ -48,7 +47,6 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" , version.ref = "firebaseAuth"}
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
-play-services-auth-api-credentials = { module = "com.google.android.gms:play-services-auth-api-credentials", version.ref = "playServicesAuthApiCredentials" }
 tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
 tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tensorflowLiteGpu" }
 tensorflow-lite-metadata = { module = "org.tensorflow:tensorflow-lite-metadata", version.ref = "tensorflowLiteMetadata" }

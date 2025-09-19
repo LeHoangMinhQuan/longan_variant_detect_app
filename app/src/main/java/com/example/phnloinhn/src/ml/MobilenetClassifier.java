@@ -7,7 +7,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.Interpreter;
+import org.tensorflow.lite.Tensor;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -69,7 +71,7 @@ public class MobilenetClassifier {
     public void init() throws IOException {
         Interpreter.Options options = new Interpreter.Options();
         options.setNumThreads(5);
-        options.setUseNNAPI(true);
+//        options.setUseNNAPI(true);
 
         interpreter = new Interpreter(Objects.requireNonNull(loadModelFile(assetManager, modelPath)), options);
         labelList = loadLabelList(assetManager, labelPath);
@@ -100,26 +102,56 @@ public class MobilenetClassifier {
         return null;
     }
 
+    // Float32
+//    private static ByteBuffer convertBitmapToByteBuffer(Bitmap bitmap, int inputSize) {
+//        bitmap = Bitmap.createScaledBitmap(bitmap, inputSize, inputSize, false);
+//
+//        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * inputSize * inputSize * 3);
+//        byteBuffer.order(ByteOrder.nativeOrder());
+//        int[] intValues = new int[inputSize * inputSize];
+//
+//        bitmap.getPixels(intValues, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+//
+//        int pixel = 0;
+//        for (int i = 0; i < inputSize; i++) {
+//            for (int j = 0; j < inputSize; j++) {
+//                int input = intValues[pixel++];
+//
+//                float r = ((input >> 16) & 0xFF);
+//                float g = ((input >> 8) & 0xFF);
+//                float b = (input & 0xFF);
+//                byteBuffer.putFloat(r);
+//                byteBuffer.putFloat(g);
+//                byteBuffer.putFloat(b);
+//            }
+//        }
+//        return byteBuffer;
+//    }
+
+    // Uint8
     private static ByteBuffer convertBitmapToByteBuffer(Bitmap bitmap, int inputSize) {
         bitmap = Bitmap.createScaledBitmap(bitmap, inputSize, inputSize, false);
 
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * inputSize * inputSize * 3);
+        // Mỗi pixel có 3 kênh (RGB), mỗi kênh 1 byte => uint8
+        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(inputSize * inputSize * 3);
         byteBuffer.order(ByteOrder.nativeOrder());
-        int[] intValues = new int[inputSize * inputSize];
 
-        bitmap.getPixels(intValues, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+        int[] intValues = new int[inputSize * inputSize];
+        bitmap.getPixels(intValues, 0, bitmap.getWidth(), 0, 0,
+                bitmap.getWidth(), bitmap.getHeight());
 
         int pixel = 0;
         for (int i = 0; i < inputSize; i++) {
             for (int j = 0; j < inputSize; j++) {
                 int input = intValues[pixel++];
 
-                float r = ((input >> 16) & 0xFF);
-                float g = ((input >> 8) & 0xFF);
-                float b = (input & 0xFF);
-                byteBuffer.putFloat(r);
-                byteBuffer.putFloat(g);
-                byteBuffer.putFloat(b);
+                int r = (input >> 16) & 0xFF;
+                int g = (input >> 8) & 0xFF;
+                int b = input & 0xFF;
+
+                byteBuffer.put((byte) r);
+                byteBuffer.put((byte) g);
+                byteBuffer.put((byte) b);
             }
         }
         return byteBuffer;
@@ -128,16 +160,41 @@ public class MobilenetClassifier {
     public List<Recognition> classify(Bitmap bitmap) {
         ByteBuffer input = convertBitmapToByteBuffer(bitmap, inputSize);
 
-        float[][] output = new float[1][labelList.size()];
-        interpreter.run(input, output);
+        // Output tensor info
+        Tensor outputTensor = interpreter.getOutputTensor(0);
+        int numClasses = outputTensor.shape()[1];  // [1, N]
+        DataType outType = outputTensor.dataType();
 
         List<Recognition> recognitions = new ArrayList<>();
-        for (int i = 0; i < labelList.size(); i++) {
-            recognitions.add(new Recognition("" + i, labelList.get(i), output[0][i]));
+
+        if (outType == DataType.UINT8) {
+            // --- Quantized output ---
+            byte[][] output = new byte[1][numClasses];
+            interpreter.run(input, output);
+
+            // Lấy quantization params
+            Tensor.QuantizationParams quant = outputTensor.quantizationParams();
+            float scale = quant.getScale();
+            int zeroPoint = quant.getZeroPoint();
+
+            for (int i = 0; i < numClasses; i++) {
+                int unsigned = output[0][i] & 0xFF; // byte -> 0..255
+                float probability = (unsigned - zeroPoint) * scale;
+                recognitions.add(new Recognition("" + i, labelList.get(i), probability));
+            }
+
+        } else if (outType == DataType.FLOAT32) {
+            // --- Float output ---
+            float[][] output = new float[1][numClasses];
+            interpreter.run(input, output);
+
+            for (int i = 0; i < numClasses; i++) {
+                recognitions.add(new Recognition("" + i, labelList.get(i), output[0][i]));
+            }
         }
 
         // Sort descending by confidence
-        Collections.sort(recognitions, (r1, r2) -> Float.compare(r2.confidence, r1.confidence));
+        Collections.sort(recognitions, (r1, r2) -> Float.compare(r2.getConfidence(), r1.getConfidence()));
         return recognitions;
     }
 

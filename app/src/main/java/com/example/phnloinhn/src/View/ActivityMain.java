@@ -119,7 +119,7 @@ public class ActivityMain extends AppCompatActivity {
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
 
         // Khởi tạo classifier
-        classifier = new MobilenetClassifier(getAssets(), "model.tflite", "labels.txt", 224);
+        classifier = new MobilenetClassifier(getAssets(), "mobilenetv3_longan_quantized.tflite", "labels.txt", 224);
         try {
             classifier.init();
         } catch (IOException e) {
