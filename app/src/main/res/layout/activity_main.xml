@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context=".src.View.ActivityMain">
+    tools:context=".src.View.ActivityMain"
+    >
 
     <include
         layout="@layout/toolbar"

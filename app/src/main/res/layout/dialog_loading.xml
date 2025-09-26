@@ -11,10 +11,11 @@
     >
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
-        style="?android:attr/progressBarStyleLarge"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:indeterminate="true"
+        app:indicatorSize="48dp"
+        app:trackThickness="4dp"
         app:indicatorColor="@color/plant_green"
     />
 

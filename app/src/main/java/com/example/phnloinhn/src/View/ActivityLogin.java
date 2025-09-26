@@ -31,6 +31,7 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
+import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory;
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
@@ -61,12 +62,16 @@ public class ActivityLogin extends AppCompatActivity {
             return insets;
         });
 
-        // Initialize Firebase Play App Check for verify requests to Firebase
+        // (Only for production with Play console developer account) Initialize Firebase Play App Check for verify requests to Firebase
+//        FirebaseApp.initializeApp(/*context=*/ this);
+//        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+//        firebaseAppCheck.installAppCheckProviderFactory(
+//                PlayIntegrityAppCheckProviderFactory.getInstance());
+        // Debug version of App Check
         FirebaseApp.initializeApp(/*context=*/ this);
         FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
         firebaseAppCheck.installAppCheckProviderFactory(
-                PlayIntegrityAppCheckProviderFactory.getInstance());
-
+                DebugAppCheckProviderFactory.getInstance());
         // Initialize Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
 
@@ -206,9 +211,10 @@ public class ActivityLogin extends AppCompatActivity {
             Toast.makeText(this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        showLoading(ActivityLogin.this, "Đang xử lý...");
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
+                    hideLoading();
                     if (task.isSuccessful()) {
                         moveToMain(mAuth.getCurrentUser());
                     } else {
@@ -232,9 +238,10 @@ public class ActivityLogin extends AppCompatActivity {
             Toast.makeText(this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        showLoading(ActivityLogin.this, "Đang xử lý...");
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
+                    hideLoading();
                     if (task.isSuccessful()) {
                         moveToMain(mAuth.getCurrentUser());
                     } else {
@@ -277,6 +284,7 @@ public class ActivityLogin extends AppCompatActivity {
             new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
                 @Override
                 public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
+                    showLoading(ActivityLogin.this, "Đang xử lý...");
                     onSignInResult(result);
                 }
             }
@@ -284,6 +292,7 @@ public class ActivityLogin extends AppCompatActivity {
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
+        hideLoading();
         if (result.getResultCode() == RESULT_OK) {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             moveToMain(user);
@@ -310,7 +319,7 @@ public class ActivityLogin extends AppCompatActivity {
     private void moveToMain(FirebaseUser user) {
         if (user == null) return;
 
-        Intent intent = new Intent(this, ActivityMain.class);
+        Intent intent = new Intent(this, TestActivity.class);
         intent.putExtra("userName", user.getDisplayName());
         intent.putExtra("userEmail", user.getEmail());
 //      intent.putExtra("userPhoto", user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : "");

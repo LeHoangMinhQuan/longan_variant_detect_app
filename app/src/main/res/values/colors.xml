@@ -8,9 +8,13 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFF</color>
     <color name="plant_green">#3CDC42</color>
-    <color name="bold_green">#1C9221</color>
+    <color name="bold_green">#2E7D32</color>
+    <color name="slight_green">#66BB6A</color>
+    <color name="background_white">#D3DCD3</color>
     <color name="material_dynamic_neutral30">#45464C</color>
     <color name="table_item_color">#80C4E0C4</color>
-    <color name="button_color">#2a6f1e</color>
+    <color name="button_general">#2a6f1e</color>
+    <color name="button_primary">#4CAF50</color>
+    <color name="button_secondary">#E0E0E0</color>
     <color name="warning">#E93E33</color>
 </resources>

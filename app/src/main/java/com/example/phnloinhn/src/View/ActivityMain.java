@@ -23,6 +23,12 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.phnloinhn.R;
 import com.example.phnloinhn.databinding.ActivityMainBinding;
+import com.example.phnloinhn.src.Model.GrowingMethod;
+import com.example.phnloinhn.src.Model.LonganVariant;
+import com.example.phnloinhn.src.Remote.FirestoreHelper;
+import com.example.phnloinhn.src.Remote.ResultCallback;
+import com.example.phnloinhn.src.Remote.StorageHelper;
+import com.example.phnloinhn.src.Utils.Utils;
 import com.example.phnloinhn.src.ml.MobilenetClassifier;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,7 +36,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,11 +46,14 @@ import java.util.List;
 public class ActivityMain extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private FirebaseFirestore db;
+    private FirestoreHelper db;
+    private StorageHelper storage;
     private Map<String, Object> longan_data; // <Variant names, Variant details>
     private MobilenetClassifier classifier;
 
     private ActivityResultLauncher<Intent> pickImageLauncher;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,48 +61,9 @@ public class ActivityMain extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        // Access a Cloud Firestore instance and initialize data hashmap
-        db = FirebaseFirestore.getInstance();
-        longan_data = new HashMap<>();
-
-        // Access data on FireStore
-        // Get all the variant documents
-        db.collection("longan_variants").get()
-                .addOnSuccessListener(variantDocs -> {
-                    for (QueryDocumentSnapshot variantDoc : variantDocs) {
-                        String variantId = variantDoc.getId();
-                        Map<String, Object> variantData = new HashMap<>(variantDoc.getData());
-
-                        // Fetch growing_methods subcollection of each variant
-                        db.collection("longan_variants")
-                                .document(variantId)
-                                .collection("growing_methods")
-                                .get()
-                                .addOnSuccessListener(methodDocs -> {
-                                    Map<String, Object> methodsData = new HashMap<>();
-
-                                    for (QueryDocumentSnapshot methodDoc : methodDocs) {
-                                        methodsData.put(methodDoc.getId(), methodDoc.getData());
-                                    }
-
-                                    // Add growing_methods into the variant data
-                                    variantData.put("growing_methods", methodsData);
-
-                                    // Store the full variant data
-                                    longan_data.put(variantId, variantData);
-
-                                    // Log for confirmation
-                                    Log.d("Fetch Data", variantId + " => " + variantData);
-                                })
-                                .addOnFailureListener(e -> {
-                                    Log.e("Fetch Data", "Error loading growing_methods for " + variantId, e);
-                                });
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("Fetch Data", "Error loading longan_variants", e);
-                });
+        // Access a Cloud Firestore and Google Storage instances
+        db = new FirestoreHelper();
+        storage = new StorageHelper();
 
         // Initialize toolbar
         MaterialToolbar toolbar = findViewById(R.id.toolbar);

@@ -15,7 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        app:cardCornerRadius="30dp">
+        app:cardBackgroundColor="@color/background_white"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        android:elevation="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,7 +73,7 @@
                 android:hint="@string/email_hint"
                 android:inputType="textEmailAddress"
                 android:padding="8dp"
-                android:textColor="@color/black" />
+                android:textColorHint="@color/black" />
 
             <TextView
                 android:id="@+id/invalidEmailWarning"
@@ -93,7 +96,7 @@
                 android:hint="@string/password_hint"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background" />
 
             <TextView
@@ -105,7 +108,7 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/forgot_password_text"
                 android:textStyle="bold"
-                android:textColor="@color/design_default_color_primary_dark"/>
+                android:textColor="@color/slight_green"/>
 
             <TextView
                 android:id="@+id/invalidPasswordWarning"
@@ -116,29 +119,28 @@
                 android:textColor="@color/warning"
                 android:visibility="gone"/>
 
-
-
             <Button
                 android:id="@+id/login_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/custom_edit_text"
-                android:backgroundTint="@color/button_color"
+                android:background="@drawable/primary_button"
                 android:text="@string/login_title"
+                android:textColor="@color/background_white"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:elevation="10dp"/>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/firebaseUiLoginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/custom_edit_text"
-                android:backgroundTint="@color/button_color"
                 android:text="@string/other_login_title"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@drawable/secondary_button"
+                android:elevation="5dp"/>
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
@@ -153,19 +155,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/custom_edit_text"
-                android:backgroundTint="@color/button_color"
+                android:background="@drawable/primary_button"
                 android:text="@string/signin_title"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/background_white"/>
 
             <Button
                 android:id="@+id/signup_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/custom_edit_text"
-                android:backgroundTint="@color/button_color"
+                android:background="@drawable/primary_button"
                 android:text="@string/signin_title"
                 android:textSize="18sp"
                 android:textStyle="bold"

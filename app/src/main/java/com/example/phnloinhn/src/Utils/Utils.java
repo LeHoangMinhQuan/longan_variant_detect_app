@@ -12,6 +12,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class Utils {
     private static AlertDialog loadingDialog;
+    public static final String IDO = "ido";
+    public static final String TIEU = "tieu";
+    public static final String XUONG = "xuong";
+    public static final String THANH_NHAN = "thanh nhan";
 
     /**
      * Show loading dialog

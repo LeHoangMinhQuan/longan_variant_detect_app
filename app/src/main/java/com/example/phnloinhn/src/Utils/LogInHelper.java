@@ -32,6 +32,7 @@ public class LogInHelper {
         PASSWORD_MSGS.put("ERROR_OPERATION_NOT_ALLOWED","Tài khoản email/password chưa được kích hoạt.");
         PASSWORD_MSGS.put("ERROR_USER_DISABLED","Tài khoản người dùng đã bị vô hiệu hóa.");
         PASSWORD_MSGS.put("ERROR_TOO_MANY_REQUESTS","Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau.");
+        PASSWORD_MSGS.put("ERROR_INVALID_CREDENTIAL", "Sai email hoặc mật khẩu");
     }
 
     public static int validateCredentials(Context context, String email, String password) {

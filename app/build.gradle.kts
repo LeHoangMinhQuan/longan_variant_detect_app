@@ -59,14 +59,19 @@ dependencies {
     // Ignore no version in AndroidTest
     androidTestImplementation(libs.firebase.auth)
 
-    // Add the dependencies for the App Check libraries
+    // Add the dependencies for the App Check libraries (for production with Play console dev acc)
     implementation(libs.firebase.appcheck.playintegrity)
+    // Debug version of App Check
+    implementation(libs.firebase.appcheck.debug)
 
     // FirebaseUI
     implementation(libs.firebase.ui.auth)
 
     // Firestore
     implementation(libs.firebase.firestore)
+
+    // Google Storage
+    implementation(libs.firebase.storage)
 
     // Credential Manager support for FirebaseUI 8+
     implementation(libs.credentials.play.services.auth)
