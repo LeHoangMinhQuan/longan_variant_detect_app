@@ -319,7 +319,7 @@ public class ActivityLogin extends AppCompatActivity {
     private void moveToMain(FirebaseUser user) {
         if (user == null) return;
 
-        Intent intent = new Intent(this, TestActivity.class);
+        Intent intent = new Intent(this, ActivityMain.class);
         intent.putExtra("userName", user.getDisplayName());
         intent.putExtra("userEmail", user.getEmail());
 //      intent.putExtra("userPhoto", user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : "");

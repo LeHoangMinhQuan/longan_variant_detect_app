@@ -110,6 +110,10 @@ public class ActivityMain extends AppCompatActivity {
 
                             if (!predictions.isEmpty()) {
                                 MobilenetClassifier.Recognition topResult = predictions.get(0);
+
+//                                Add here: use prediction to search for information
+//                                        - Show info on Home Fragment
+
                                 Toast.makeText(this, "Kết quả: " + topResult.getTitle() + " (" + topResult.getConfidence() + ")", Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(this, "Không dự đoán được", Toast.LENGTH_SHORT).show();

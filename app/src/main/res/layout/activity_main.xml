@@ -54,7 +54,7 @@
         android:id="@+id/navView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="-15dp"
+        android:layout_marginBottom="-10dp"
         android:padding="10dp"
         android:background="@drawable/navbar_background"
         app:itemIconTint="@color/nav_item_color"
