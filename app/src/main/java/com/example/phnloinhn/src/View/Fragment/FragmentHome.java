@@ -12,14 +12,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.phnloinhn.R;
+import com.example.phnloinhn.databinding.FragmentHomeBinding;
 import com.example.phnloinhn.src.ViewModel.FragmentHomeViewModel;
 
 public class FragmentHome extends Fragment {
 
+    private FragmentHomeBinding binding;
     private FragmentHomeViewModel mViewModel;
 
     public static FragmentHome newInstance() {
         return new FragmentHome();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -27,10 +36,13 @@ public class FragmentHome extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(FragmentHomeViewModel.class);
 
-        // Observe kết quả AI
-        mViewModel.getResult().observe(getViewLifecycleOwner(), result -> {
-            // TODO: update UI, ví dụ hiển thị nhãn và độ tin cậy
-        });
+        // Show Instructions on Fragment
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
 }

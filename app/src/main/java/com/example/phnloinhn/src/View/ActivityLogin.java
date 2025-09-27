@@ -1,12 +1,21 @@
 package com.example.phnloinhn.src.View;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
+import static com.example.phnloinhn.src.Utils.Utils.hideLoading;
+import static com.example.phnloinhn.src.Utils.Utils.showLoading;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
+
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -21,7 +30,7 @@ import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
-import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory;
+import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,12 +38,13 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Arrays;
 import java.util.List;
 
-import com.example.phnloinhn.src.Helper.LogInHelper;
+import com.example.phnloinhn.src.Utils.LogInHelper;
 
 public class ActivityLogin extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private ActivityLoginBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +58,16 @@ public class ActivityLogin extends AppCompatActivity {
             return insets;
         });
 
-        // Initialize Firebase Play App Check for verify requests to Firebase
+        // (Only for production with Play console developer account) Initialize Firebase Play App Check for verify requests to Firebase
+//        FirebaseApp.initializeApp(/*context=*/ this);
+//        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+//        firebaseAppCheck.installAppCheckProviderFactory(
+//                PlayIntegrityAppCheckProviderFactory.getInstance());
+        // Debug version of App Check
         FirebaseApp.initializeApp(/*context=*/ this);
         FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
         firebaseAppCheck.installAppCheckProviderFactory(
-                PlayIntegrityAppCheckProviderFactory.getInstance());
-
+                DebugAppCheckProviderFactory.getInstance());
         // Initialize Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
 
@@ -62,56 +76,130 @@ public class ActivityLogin extends AppCompatActivity {
         if (currentUser != null) {
             moveToMain(currentUser);
         }
+        addLoginListeners();
+    }
 
+    // Add listeners for login buttons
+    private void addLoginListeners(){
+        // Add listener for forgot password
+        binding.forgotPassword.setOnClickListener(v -> handleForgotPassword());
         // Add listeners for buttons
         binding.loginButton.setOnClickListener(v -> {
             String email = binding.editTextUsername.getText().toString().trim();
             String password = binding.editTextPassword.getText().toString().trim();
-            if (validateCredentials(email, password) == 1){
+            if (LogInHelper.validateCredentials(ActivityLogin.this, email, password) == LogInHelper.INVALID_EMAIL){
                 // Show warning above email editText
-
+                binding.invalidEmailWarning.setVisibility(GONE);
             }
-            else if (validateCredentials(email, password) == 2) {
-                // Show warning above password editText
+            else if (LogInHelper.validateCredentials(ActivityLogin.this, email, password) == LogInHelper.INVALID_PASSWORD) {
+                // Show warning below password editText
+                binding.invalidPasswordWarning.setVisibility(VISIBLE);
             } else loginUser(email, password);
         });
 
-        binding.signupButton.setOnClickListener(v -> {
-            String email = binding.editTextUsername.getText().toString().trim();
-            String password = binding.editTextPassword.getText().toString().trim();
-            if (validateCredentials(email, password) == 1){
-                // Show warning above email editText
+        binding.signupSwitch.setOnClickListener(v -> switchToSignUpUI());
 
-            }
-            else if (validateCredentials(email, password) == 2) {
-                // Show warning above password editText
-            } else registerUser(email, password); // All credentials are valid
-        });
 
         binding.firebaseUiLoginButton.setOnClickListener(v -> {
             // Sign in with Google or Guest
             startNewSignIn();
         });
-
     }
 
-    // Validate credentials : 0 - All True, 1 - Email invalid, 2 - Password invalid
-    private int validateCredentials(String email, String password) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        // At least 8 characters, 1 uppercase, 1 digit, 1 special character
-        String passwordRegex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/]).{8,}$";
+    private void handleForgotPassword() {
+        String email = binding.editTextUsername.getText().toString().trim();
 
-        if (!email.matches(emailRegex)) {
-            Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
-            return 1;
+        if (email.isEmpty()) {
+            Toast.makeText(ActivityLogin.this, "Hãy nhập email cần đổi mật khẩu", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        if (!password.matches(passwordRegex)) {
-            Toast.makeText(this, "Mật khẩu cần ít nhất 8 ký tự, 1 chữ in hoa, 1 số và 1 ký tự đặc biệt", Toast.LENGTH_LONG).show();
-            return 2;
-        }
+        if (LogInHelper.validateEmail(ActivityLogin.this, email) == LogInHelper.INVALID_EMAIL){
+            // Show warning above email editText
+            binding.invalidEmailWarning.setVisibility(VISIBLE);
+        } else binding.invalidEmailWarning.setVisibility(GONE);
+        showLoading(ActivityLogin.this, "Đang xử lý...");
+        mAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(this, task -> {
+                    hideLoading();
+                    if (task.isSuccessful()) {
+                        // Show success message
+                        Toast.makeText(this, "Gửi email thành công, hãy kiểm tra thư đến và thư rác.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Exception e = task.getException();
+                        if (e instanceof FirebaseAuthException) {
+                            String errorCode = ((FirebaseAuthException) e).getErrorCode();
+                            String message = LogInHelper.PASSWORD_MSGS.getOrDefault(errorCode, "Lỗi không xác định.");
+                            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                            Log.e("FirebaseError", "Code: " + errorCode + ", Message: " + message);
+                        } else {
+                            assert e != null;
+                            Toast.makeText(this, "Đã xảy ra lỗi: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Log.e("FirebaseError", "Exception: ", e);
+                        }
+                    }
+                });
+    }
 
-        return 0;
+    // Hidden sign in button, visualize sign-up related components
+    private void switchToSignUpUI() {
+        List<View> hideComponents = Arrays.asList(
+                binding.loginButton,
+                binding.firebaseUiLoginButton,
+                binding.signupSwitch,
+                binding.forgotPassword
+        );
+        for (View component : hideComponents) {
+            component.setVisibility(GONE);
+            component.setOnClickListener(null);
+        }
+        
+        // Display back button
+        binding.imageButton2.setVisibility(VISIBLE);
+        binding.imageButton2.setOnClickListener(v -> handleSwitchToLogIn());
+        // Display signup button
+        binding.signupButton.setVisibility(VISIBLE);
+        binding.signupButton.setOnClickListener(v -> handleSignUp());
+        // Change card title
+        binding.logInText.setText(R.string.signin_title);
+    }
+
+    private void handleSwitchToLogIn() {
+        List<View> hideComponents = Arrays.asList(
+                binding.imageButton2,
+                binding.signupButton
+        );
+        List<View> displayComponents = Arrays.asList(
+                binding.loginButton,
+                binding.firebaseUiLoginButton,
+                binding.signupSwitch,
+                binding.forgotPassword
+        );
+        for (View component : hideComponents) {
+            component.setVisibility(GONE);
+            component.setOnClickListener(null);
+        }
+        // Change card title to Login
+        binding.logInText.setText(R.string.login_title);
+        // Display components
+        for (View component : displayComponents) {
+            component.setVisibility(VISIBLE);
+        }
+        // Add listeners for buttons
+        addLoginListeners();
+    }
+
+    private void handleSignUp() {
+        String email = binding.editTextUsername.getText().toString().trim();
+        String password = binding.editTextPassword.getText().toString().trim();
+        if (LogInHelper.validateCredentials(ActivityLogin.this, email, password) == LogInHelper.INVALID_EMAIL){
+            // Show warning below email editText
+            binding.invalidEmailWarning.setVisibility(GONE);
+        }
+        else if (LogInHelper.validateCredentials(ActivityLogin.this, email, password) == LogInHelper.INVALID_PASSWORD) {
+            // Show warning below password editText
+            binding.invalidPasswordWarning.setVisibility(VISIBLE);
+        } else registerUser(email, password); // All credentials are valid
     }
 
     private void loginUser(String email, String password) {
@@ -119,9 +207,10 @@ public class ActivityLogin extends AppCompatActivity {
             Toast.makeText(this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        showLoading(ActivityLogin.this, "Đang xử lý...");
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
+                    hideLoading();
                     if (task.isSuccessful()) {
                         moveToMain(mAuth.getCurrentUser());
                     } else {
@@ -145,9 +234,10 @@ public class ActivityLogin extends AppCompatActivity {
             Toast.makeText(this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        showLoading(ActivityLogin.this, "Đang xử lý...");
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
+                    hideLoading();
                     if (task.isSuccessful()) {
                         moveToMain(mAuth.getCurrentUser());
                     } else {
@@ -178,8 +268,8 @@ public class ActivityLogin extends AppCompatActivity {
         Intent signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .setLogo(R.drawable.ic_launcher_foreground) // optional
-//                .setTheme(R.style.Theme_PhnLoiNhn) // optional
+                .setLogo(R.mipmap.app_logo) // optional
+                .setTheme(R.style.Theme_PhanLoaiNhan)
                 .build();
         signInLauncher.launch(signInIntent);
     }
@@ -190,6 +280,7 @@ public class ActivityLogin extends AppCompatActivity {
             new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
                 @Override
                 public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
+                    showLoading(ActivityLogin.this, "Đang xử lý...");
                     onSignInResult(result);
                 }
             }
@@ -197,6 +288,7 @@ public class ActivityLogin extends AppCompatActivity {
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
+        hideLoading();
         if (result.getResultCode() == RESULT_OK) {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             moveToMain(user);
@@ -222,7 +314,6 @@ public class ActivityLogin extends AppCompatActivity {
     // 5. Move to MainActivity and pass user info via Intent extras
     private void moveToMain(FirebaseUser user) {
         if (user == null) return;
-
         Intent intent = new Intent(this, ActivityMain.class);
         intent.putExtra("userName", user.getDisplayName());
         intent.putExtra("userEmail", user.getEmail());
