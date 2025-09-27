@@ -1,4 +1,4 @@
-Nhan ido
-Nhan tieu
-Nhan xuong
-Thanh Nhan
+ido
+tieu
+xuong
+thanh nhan

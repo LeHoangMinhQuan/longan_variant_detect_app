@@ -6,11 +6,11 @@ import com.google.firebase.Timestamp;
 public class History {
     private String variantName;
     private String imageUrl;
-    private Timestamp timestamp;
+    private String timestamp;
 
     public History() {}
 
-    public History(String variantName, String imageUrl, Timestamp timestamp) {
+    public History(String variantName, String imageUrl, String timestamp) {
         this.variantName = variantName;
         this.imageUrl = imageUrl;
         this.timestamp = timestamp;
@@ -23,7 +23,7 @@ public class History {
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
-    public Timestamp getTimestamp() { return timestamp; }
-    public void setTimestamp(Timestamp timestamp) { this.timestamp = timestamp; }
+    public String getTimestamp() { return timestamp; }
+    public void setTimestamp(String timestamp) { this.timestamp = timestamp; }
 }
 

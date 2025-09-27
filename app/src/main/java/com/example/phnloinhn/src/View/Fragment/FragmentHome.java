@@ -36,11 +36,7 @@ public class FragmentHome extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(FragmentHomeViewModel.class);
 
-        // Observe kết quả AI
-        mViewModel.getResult().observe(getViewLifecycleOwner(), result -> {
-            // TODO: update UI, ví dụ hiển thị nhãn và độ tin cậy
-
-        });
+        // Show Instructions on Fragment
     }
 
     @Override

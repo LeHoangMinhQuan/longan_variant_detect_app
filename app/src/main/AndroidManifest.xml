@@ -26,8 +26,6 @@
             android:exported="false"
             android:label="@string/title_activity_main">
         </activity>
-        <activity android:name=".src.View.TestActivity"
-            android:exported="false"/>
     </application>
 
 </manifest>

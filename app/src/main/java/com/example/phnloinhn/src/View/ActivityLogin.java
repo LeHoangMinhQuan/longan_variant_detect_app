@@ -28,11 +28,9 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.FirebaseUiException;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory;
-import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,13 +39,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.example.phnloinhn.src.Utils.LogInHelper;
-import com.example.phnloinhn.src.Utils.Utils;
 
 public class ActivityLogin extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private ActivityLoginBinding binding;
-    private AlertDialog loadingDialog;
 
 
     @Override
@@ -318,7 +314,6 @@ public class ActivityLogin extends AppCompatActivity {
     // 5. Move to MainActivity and pass user info via Intent extras
     private void moveToMain(FirebaseUser user) {
         if (user == null) return;
-
         Intent intent = new Intent(this, ActivityMain.class);
         intent.putExtra("userName", user.getDisplayName());
         intent.putExtra("userEmail", user.getEmail());

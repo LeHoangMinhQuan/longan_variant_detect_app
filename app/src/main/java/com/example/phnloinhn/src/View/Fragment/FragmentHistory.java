@@ -36,6 +36,7 @@ public class FragmentHistory extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+
         // Sample data
         HistoryAdapter adapter = new HistoryAdapter(Arrays.asList(
                 "Item 1", "Item 2", "Item 3", "Item 4", "Item 5"
