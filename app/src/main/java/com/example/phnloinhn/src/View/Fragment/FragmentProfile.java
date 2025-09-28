@@ -11,15 +11,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.example.phnloinhn.R;
 import com.example.phnloinhn.databinding.FragmentProfileBinding;
-import com.example.phnloinhn.src.ViewModel.FragmentProfileViewModel;
 
 public class FragmentProfile extends Fragment {
 
-    private FragmentProfileViewModel mViewModel;
     private FragmentProfileBinding binding;
 
     public static FragmentProfile newInstance() {

@@ -1,7 +1,5 @@
 package com.example.phnloinhn.src.View.Fragment;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,13 +14,11 @@ import android.view.ViewGroup;
 
 import com.example.phnloinhn.R;
 import com.example.phnloinhn.src.View.HistoryAdapter;
-import com.example.phnloinhn.src.ViewModel.FragmentHistoryViewModel;
 
 import java.util.Arrays;
 
 public class FragmentHistory extends Fragment {
 
-    private FragmentHistoryViewModel mViewModel;
 
     public static FragmentHistory newInstance() {
         return new FragmentHistory();

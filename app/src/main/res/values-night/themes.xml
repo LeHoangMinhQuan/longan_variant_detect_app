@@ -8,6 +8,7 @@
         <item name="colorPrimary">@color/plant_green</item>
         <item name="colorOnPrimary">@color/background_white</item>
         <item name="colorPrimaryVariant">@color/design_default_color_primary_dark</item>
+        <item name="android:textColorPrimary">@color/cardview_dark_background</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/button_secondary</item>
         <item name="colorSecondaryVariant">@color/background_white</item>
@@ -18,5 +19,6 @@
         <item name="colorControlNormal">@null</item>
 
         <item name="android:background">@color/white</item>
+        <item name="android:textColorSecondary">@color/cardview_dark_background</item>
     </style>
 </resources>

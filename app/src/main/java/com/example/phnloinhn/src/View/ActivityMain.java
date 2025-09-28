@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -30,6 +31,7 @@ import com.example.phnloinhn.src.Remote.FirestoreHelper;
 import com.example.phnloinhn.src.Remote.ResultCallback;
 import com.example.phnloinhn.src.Remote.StorageHelper;
 import com.example.phnloinhn.src.Utils.Utils;
+import com.example.phnloinhn.src.ViewModel.SharedViewModel;
 import com.example.phnloinhn.src.ml.MobilenetClassifier;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -60,6 +62,7 @@ public class ActivityMain extends AppCompatActivity {
     private final String TAG = "ActivityMain";
     private Map<String, LonganVariant> data;
     private List<History> historyList;
+    private SharedViewModel viewModel;
 
 
     @Override
@@ -69,13 +72,14 @@ public class ActivityMain extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        viewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+
         mauth = FirebaseAuth.getInstance();
         // Access a Cloud Firestore and Google Storage instances
         db = new FirestoreHelper(mauth.getCurrentUser().getUid());
         storage = new StorageHelper();
         data = new HashMap<>();
         historyList = new ArrayList<>();
-
 
         // Fetch longan data and history data of user in background.
         fetchVariants();
@@ -157,9 +161,8 @@ public class ActivityMain extends AppCompatActivity {
 
             // Use prediction to get information
             String variant_name = topResult.getTitle();
-            float confident = topResult.getConfidence();
             // Show info on Home Fragment
-            updateFragment(variant_name, confident);
+            updateFragment(variant_name);
             // Upload image to Storage and history data to Firestore in background
             uploadImage(imageUri, variant_name);
 
@@ -169,10 +172,16 @@ public class ActivityMain extends AppCompatActivity {
         }
     }
 
-    private void updateFragment(String variantName, float confident) {
-        Toast.makeText(this, "Updating fragment", Toast.LENGTH_SHORT).show();
+    private void updateFragment(String variantName) {
+        LonganVariant variant = data.get(variantName);
+        Log.d(TAG, "variantName: " + variantName);
+        Log.d(TAG, "variant: " + variant);
+        Log.d(TAG, "variant name: " + variant.getName());
+        if (variant != null) {
+            viewModel.setSelectedVariant(variant);
+            Log.d(TAG, "Set the selected variant in viewmodel");
+        }
     }
-
 
     private void fetchVariants() {
         db.getAllVariants(new ResultCallback<Map<String, LonganVariant>>() {

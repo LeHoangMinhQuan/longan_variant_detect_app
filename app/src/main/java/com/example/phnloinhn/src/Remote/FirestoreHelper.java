@@ -13,7 +13,7 @@ public class FirestoreHelper {
 
     private static final String TAG = "FirestoreHelper";
     private final FirebaseFirestore db;
-    private String uid = "";
+    private String uid;
 
     public FirestoreHelper(String uid) {
         this.db = FirebaseFirestore.getInstance();
@@ -50,34 +50,6 @@ public class FirestoreHelper {
                 .addOnFailureListener(callback::onFailure);
     }
 
-    // Fetch one variant by ID
-    public void getVariantById(String id, ResultCallback<LonganVariant> callback) {
-        db.collection("longan_variants").document(id).get()
-                .addOnSuccessListener(doc -> {
-                    if (doc.exists()) {
-                        LonganVariant variant = doc.toObject(LonganVariant.class);
-
-                        db.collection("longan_variants")
-                                .document(id)
-                                .collection("growing_methods")
-                                .get()
-                                .addOnSuccessListener(methodDocs -> {
-                                    Map<String, GrowingMethod> methodsData = new HashMap<>();
-                                    for (QueryDocumentSnapshot methodDoc : methodDocs) {
-                                        methodsData.put(methodDoc.getId(), methodDoc.toObject(GrowingMethod.class));
-                                    }
-                                    if (variant != null) {
-                                        variant.setGrowingMethods(methodsData);
-                                    }
-                                    callback.onSuccess(variant);
-                                });
-                    } else {
-                        callback.onFailure(new Exception("Variant not found"));
-                    }
-                })
-                .addOnFailureListener(callback::onFailure);
-    }
-
     public void getAllHistory(ResultCallback<List<History>> callback) {
         db.collection("users")
                 .document(uid)
@@ -103,11 +75,11 @@ public class FirestoreHelper {
                 .document(docName)
                 .set(history)
                 .addOnSuccessListener(unused -> {
-                    Log.d("Firestore", "History added for user " + uid);
+                    Log.d(TAG, "History added for user " + uid);
                     callback.onSuccess(true);
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Failed to add history", e);
+                    Log.e(TAG, "Failed to add history", e);
                     callback.onFailure(e);
                 });
     }

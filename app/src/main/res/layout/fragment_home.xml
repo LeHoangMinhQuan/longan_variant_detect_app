@@ -8,12 +8,19 @@
     tools:context=".src.View.Fragment.FragmentHome"
     android:id="@+id/fragment_home">
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="Home Fragment"
-        android:textColor="@color/black" />
+        android:padding="10dp">
+        <LinearLayout
+            android:id="@+id/container"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="?android:attr/dividerHorizontal"
+            android:showDividers="middle">
+
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>
