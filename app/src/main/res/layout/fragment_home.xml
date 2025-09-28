@@ -11,7 +11,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:contentDescription="Scroll View">
         <LinearLayout
             android:id="@+id/container"
             android:orientation="vertical"
@@ -22,5 +23,40 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <!-- FABs container -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:gravity="end">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:srcCompat="@drawable/ic_add_green_24dp"
+                android:backgroundTint="@color/white"
+                android:layout_gravity="end"
+                android:layout_margin="15dp"
+                android:contentDescription="@string/fab_add_des"
+                />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:srcCompat="@drawable/ic_camera_green_24dp"
+                android:backgroundTint="@color/white"
+                android:layout_gravity="end"
+                android:layout_margin="15dp"
+                android:contentDescription="@string/fab_cam_des"
+                />
+    </LinearLayout>
 
 </FrameLayout>

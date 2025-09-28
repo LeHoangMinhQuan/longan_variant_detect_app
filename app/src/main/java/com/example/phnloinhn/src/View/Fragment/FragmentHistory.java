@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,16 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.phnloinhn.R;
+import com.example.phnloinhn.src.View.ActivityMain;
 import com.example.phnloinhn.src.View.HistoryAdapter;
-
-import java.util.Arrays;
+import com.example.phnloinhn.src.ViewModel.SharedViewModel;
 
 public class FragmentHistory extends Fragment {
-
-
-    public static FragmentHistory newInstance() {
-        return new FragmentHistory();
-    }
+    private SharedViewModel viewModel;
+    private HistoryAdapter adapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -32,15 +30,19 @@ public class FragmentHistory extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
-        // Sample data
-        HistoryAdapter adapter = new HistoryAdapter(Arrays.asList(
-                "Item 1", "Item 2", "Item 3", "Item 4", "Item 5"
-        ));
+        adapter = new HistoryAdapter(getContext());
         recyclerView.setAdapter(adapter);
+
+        // Get shared ViewModel
+        viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
+        // Observe history list
+        viewModel.getHistoryList().observe(getViewLifecycleOwner(), histories -> {
+            if (histories != null) {
+                adapter.submitList(histories); // DiffUtil handles changes
+            }
+        });
 
         return view;
     }
-
-
 }

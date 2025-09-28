@@ -91,6 +91,9 @@ dependencies {
     // For GPU delegate
     implementation(libs.tensorflow.lite.gpu)
 
+    // Glide for fetching history images smoothly
+    implementation(libs.glide)
+
     // Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

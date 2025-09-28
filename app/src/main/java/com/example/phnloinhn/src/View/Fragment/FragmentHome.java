@@ -1,10 +1,18 @@
 package com.example.phnloinhn.src.View.Fragment;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,13 +20,14 @@ import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.phnloinhn.R;
 import com.example.phnloinhn.databinding.FragmentHomeBinding;
@@ -30,6 +39,7 @@ import com.example.phnloinhn.src.Model.GrowingMethod;
 import com.example.phnloinhn.src.Model.LonganVariant;
 import com.example.phnloinhn.src.ViewModel.SharedViewModel;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +48,7 @@ public class FragmentHome extends Fragment {
     private FragmentHomeBinding binding;
     private OnBackPressedCallback callback;
     private SharedViewModel viewModel;
+    private ActivityResultLauncher<Intent> pickImageLauncher;
     private final String TAG = "FragmentHome";
 
     private static final Map<String, Integer> VARIANT_IMAGES = new HashMap<>();
@@ -46,9 +57,6 @@ public class FragmentHome extends Fragment {
         VARIANT_IMAGES.put("tieu", R.drawable.tieu);
         VARIANT_IMAGES.put("xuong", R.drawable.xuong);
         VARIANT_IMAGES.put("thanh_nhan", R.drawable.thanh_nhan);
-    }
-    public static FragmentHome newInstance() {
-        return new FragmentHome();
     }
 
     @Nullable
@@ -61,21 +69,6 @@ public class FragmentHome extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Show Instructions on Fragment
-//        displayInitialInformation();
-
-        viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-
-        viewModel.getSelectedVariant().observe(getViewLifecycleOwner(), variant -> {
-            if (variant == null) {
-                Log.d(TAG, "Get selected variant is null");
-                displayInitialInformation();
-            }
-            else {
-                Log.d(TAG, "Get selected variant is not null");
-                displayVariant(variant);
-            }
-        });
         // Add callback for initialize FragmentHome
         callback = new OnBackPressedCallback(false) {
             @Override
@@ -93,6 +86,41 @@ public class FragmentHome extends Fragment {
                 getViewLifecycleOwner(),
                 callback
         );
+
+        // Assign viewModel
+        viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
+        pickImageLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == getActivity().RESULT_OK && result.getData() != null) {
+                        Uri imageUri = result.getData().getData();
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), imageUri);
+                            viewModel.classifyImage(bitmap, imageUri);
+                        } catch (IOException e) {
+                            Toast.makeText(requireContext(), "Không đọc được ảnh", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+        );
+
+        // Attach contract to fabAdd
+        binding.fabAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            pickImageLauncher.launch(Intent.createChooser(intent, "Chọn ảnh"));
+        });
+
+        viewModel.getSelectedVariant().observe(getViewLifecycleOwner(), variant -> {
+            if (variant == null) displayInitialInformation();
+            else displayVariant(variant);
+        });
+
+        viewModel.getMessage().observe(getViewLifecycleOwner(), msg ->
+                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+        );
+
     }
 
     @Override
@@ -104,6 +132,13 @@ public class FragmentHome extends Fragment {
     private void displayInitialInformation() {
         callback.setEnabled(false);
         binding.container.removeAllViews();
+
+        // Add fab buttons
+        binding.fabAdd.setVisibility(VISIBLE);
+        binding.fabAdd.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+        binding.fabCamera.setVisibility(VISIBLE);
+        binding.fabCamera.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+
         // Notes
         addParagraph(getString(R.string.note_title), "");
         addNoTitleBullet(R.string.note_1, 0);
@@ -122,6 +157,12 @@ public class FragmentHome extends Fragment {
 
     private void displayVariant(LonganVariant variant) {
         binding.container.removeAllViews();
+
+        // Hide and disable fab buttons until back to initial screen
+        binding.fabAdd.setVisibility(GONE);
+        binding.fabAdd.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        binding.fabCamera.setVisibility(GONE);
+        binding.fabCamera.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
 
         // Section: Name
         addSectionTitle(variant.getName());

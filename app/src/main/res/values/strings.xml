@@ -39,4 +39,9 @@
     <string name="guide_title">Hướng dẫn sử dụng:</string>
     <string name="guide_1">Ấn %1$s để chụp ảnh trực tiếp bằng điện thoại.</string>
     <string name="guide_2">Ấn %1$s để chọn ảnh có sẵn từ thư viện.</string>
+    <string name="invalid_date">Lỗi ngày tháng</string>
+    <string name="ido">Nhãn ido</string>
+    <string name="xuong">Nhãn xuồng</string>
+    <string name="tieu">Nhãn tiêu</string>
+    <string name="thanh_nhan">Thanh nhãn</string>
 </resources>

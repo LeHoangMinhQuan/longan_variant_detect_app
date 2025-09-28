@@ -40,4 +40,9 @@
     <string name="guide_title">How to use:</string>
     <string name="guide_1">Tap %1$s to take a photo with your phone.</string>
     <string name="guide_2">Tap %1$s to select an image from your gallery.</string>
+    <string name="invalid_date">Invalid date</string>
+    <string name="ido">Ido</string>
+    <string name="xuong">Xuong</string>
+    <string name="tieu">Tieu</string>
+    <string name="thanh_nhan">Thanh nhan</string>
 </resources>
