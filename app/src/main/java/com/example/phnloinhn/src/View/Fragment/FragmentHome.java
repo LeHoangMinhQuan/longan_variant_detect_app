@@ -17,6 +17,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -24,6 +25,7 @@ import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +41,7 @@ import com.example.phnloinhn.src.Model.GrowingMethod;
 import com.example.phnloinhn.src.Model.LonganVariant;
 import com.example.phnloinhn.src.ViewModel.SharedViewModel;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +53,9 @@ public class FragmentHome extends Fragment {
     private SharedViewModel viewModel;
     private ActivityResultLauncher<Intent> pickImageLauncher;
     private final String TAG = "FragmentHome";
+    private ActivityResultLauncher<Uri> takePhotoLauncher;
+    private Uri tempPhotoUri;
+
 
     private static final Map<String, Integer> VARIANT_IMAGES = new HashMap<>();
     static {
@@ -57,6 +63,13 @@ public class FragmentHome extends Fragment {
         VARIANT_IMAGES.put("tieu", R.drawable.tieu);
         VARIANT_IMAGES.put("xuong", R.drawable.xuong);
         VARIANT_IMAGES.put("thanh_nhan", R.drawable.thanh_nhan);
+    }
+    private static final Map<String, String> VARIANT_ID = new HashMap<>();
+    static {
+        VARIANT_ID.put("Nhãn Ido", "ido");
+        VARIANT_ID.put("Nhãn Tiêu", "tieu");
+        VARIANT_ID.put("Nhãn Xuồng", "xuong");
+        VARIANT_ID.put("Thanh Nhãn", "thanh_nhan");
     }
 
     @Nullable
@@ -105,12 +118,36 @@ public class FragmentHome extends Fragment {
                 }
         );
 
+        takePhotoLauncher = registerForActivityResult(
+                new ActivityResultContracts.TakePicture(),
+                success -> {
+                    if (success && tempPhotoUri != null) {
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                                    requireContext().getContentResolver(),
+                                    tempPhotoUri
+                            );
+                            viewModel.classifyImage(bitmap, tempPhotoUri);
+                        } catch (IOException e) {
+                            Toast.makeText(requireContext(), "Không đọc được ảnh chụp", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+        );
+
+
         // Attach contract to fabAdd
         binding.fabAdd.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             pickImageLauncher.launch(Intent.createChooser(intent, "Chọn ảnh"));
         });
+        // Attach contract to fabCamera
+        binding.fabCamera.setOnClickListener(v -> {
+            tempPhotoUri = createTempImageUri();
+            takePhotoLauncher.launch(tempPhotoUri);
+        });
+
 
         viewModel.getSelectedVariant().observe(getViewLifecycleOwner(), variant -> {
             if (variant == null) displayInitialInformation();
@@ -201,8 +238,10 @@ public class FragmentHome extends Fragment {
         binding.container.addView(itemBinding.getRoot());
     }
     private void addImageView(String variantName) {
-        Integer resId = VARIANT_IMAGES.get(variantName);
-
+        Log.d(TAG, "variantName: " + variantName);
+        String variant_id = VARIANT_ID.get(variantName);
+        Integer resId = VARIANT_IMAGES.get(variant_id);
+        Log.d(TAG, "resId: " + resId);
         if (resId != null) {
             ItemImageBinding itemBinding = ItemImageBinding.inflate(getLayoutInflater(), binding.container, false);
             itemBinding.ivVariant.setImageResource(resId);
@@ -259,6 +298,15 @@ public class FragmentHome extends Fragment {
                 ItemBulletBinding.inflate(getLayoutInflater(), binding.container, false);
         itemBinding.tvBullet.setText(spannable);
         binding.container.addView(itemBinding.getRoot());
+    }
+
+    private Uri createTempImageUri() {
+        File photoFile = new File(requireContext().getFilesDir(), "temp_photo.jpg");
+        return FileProvider.getUriForFile(
+                requireContext(),
+                requireContext().getPackageName() + ".provider",
+                photoFile
+        );
     }
 
 }
