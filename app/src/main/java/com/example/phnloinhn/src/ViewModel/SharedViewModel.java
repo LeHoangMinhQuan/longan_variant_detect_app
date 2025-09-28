@@ -22,6 +22,8 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -76,6 +78,9 @@ public class SharedViewModel extends AndroidViewModel {
         db.getAllHistory(new ResultCallback<List<History>>() {
             @Override
             public void onSuccess(List<History> result) {
+                // Sort by timestamp descending
+                result.sort((h1, h2) ->
+                        h2.getTimestamp().compareTo(h1.getTimestamp()));
                 historyList.postValue(result);
             }
 
@@ -108,30 +113,72 @@ public class SharedViewModel extends AndroidViewModel {
 
         String date = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault()).format(new Date());
         String fileName = variantName + "_" + date;
-
         StorageReference path = storage.getUserHistoryRef(fileName);
+
         storage.uploadImage(null, path, uri, new ResultCallback<String>() {
             @Override
             public void onSuccess(String url) {
-                db.addHistory(new History(variantName, url, date), new ResultCallback<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean result) {
-                        message.postValue("Đã lưu lịch sử");
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        message.postValue("Lỗi khi lưu lịch sử");
-                    }
-                });
+                saveHistory(new History(variantName, url, date));
             }
-
             @Override
             public void onFailure(Exception e) {
                 message.postValue("Lỗi khi tải ảnh lên");
             }
         });
     }
+
+    private void saveHistory(History newHistory) {
+        db.addHistory(newHistory, new ResultCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                List<History> current = historyList.getValue();
+                if (current != null) {
+                    current.add(newHistory);
+                    // Keep sorted newest first
+                    Collections.sort(current, (h1, h2) ->
+                            h2.getTimestamp().compareTo(h1.getTimestamp()));
+                    historyList.postValue(current);
+                }
+                message.postValue("Đã lưu lịch sử");
+            }
+            @Override
+            public void onFailure(Exception e) {
+                message.postValue("Lỗi khi lưu lịch sử");
+            }
+        });
+    }
+    public void deleteHistory(History history) {
+        // Update UI immediately
+        List<History> current = historyList.getValue();
+        if (current != null) {
+            List<History> updated = new ArrayList<>(current);
+            if (updated.remove(history)) {
+                historyList.postValue(updated);
+            }
+        }
+
+        // Then sync with Firestore
+        db.deleteHistory(history, new ResultCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                message.postValue("Đã xóa lịch sử");
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // If failed, re-add the history (rollback)
+                List<History> rollback = historyList.getValue();
+                if (rollback != null) {
+                    List<History> restored = new ArrayList<>(rollback);
+                    restored.add(history);
+                    historyList.postValue(restored);
+                }
+                message.postValue("Lỗi khi xóa lịch sử");
+            }
+        });
+    }
+
+
 }
 
 

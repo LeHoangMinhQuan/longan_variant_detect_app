@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.phnloinhn.R;
+import com.example.phnloinhn.src.Utils.SpacingItemDecoration;
 import com.example.phnloinhn.src.View.ActivityMain;
 import com.example.phnloinhn.src.View.HistoryAdapter;
 import com.example.phnloinhn.src.ViewModel.SharedViewModel;
@@ -30,7 +31,12 @@ public class FragmentHistory extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new HistoryAdapter(getContext());
+        HistoryAdapter adapter = new HistoryAdapter(requireContext(), history -> {
+            viewModel.deleteHistory(history);
+        });
+        int spacing = getResources().getDimensionPixelSize(R.dimen.recycler_item_spacing);
+        recyclerView.addItemDecoration(new SpacingItemDecoration(spacing));
+
         recyclerView.setAdapter(adapter);
 
         // Get shared ViewModel

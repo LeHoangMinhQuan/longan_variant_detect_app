@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public class HistoryAdapter extends ListAdapter<History, HistoryAdapter.ViewHolder> {
+
+
     private final String TAG = "HistoryAdapter";
     private Context context;
 
@@ -41,11 +44,15 @@ public class HistoryAdapter extends ListAdapter<History, HistoryAdapter.ViewHold
         VARIANT_NAME_TO_RES_ID.put("thanh_nhan", R.string.thanh_nhan);
     }
 
-    public HistoryAdapter(Context context) {
+    public HistoryAdapter(Context context, OnHistoryDeleteListener deleteListener) {
         super(DIFF_CALLBACK);
         this.context = context;
+        this.deleteListener = deleteListener;
     }
-
+    public interface OnHistoryDeleteListener {
+        void onDelete(History history);
+    }
+    private final OnHistoryDeleteListener deleteListener;
     private static final DiffUtil.ItemCallback<History> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<History>() {
                 @Override
@@ -63,12 +70,14 @@ public class HistoryAdapter extends ListAdapter<History, HistoryAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView textName, textTimestamp;
+        ImageButton btnDelete; // new
 
         ViewHolder(View view) {
             super(view);
             imageView = view.findViewById(R.id.history_img);
             textName = view.findViewById(R.id.variantName);
-            textTimestamp = view.findViewById(R.id.timestamp); // reuse "price" TextView for timestamp
+            textTimestamp = view.findViewById(R.id.timestamp);
+            btnDelete = view.findViewById(R.id.btn_delete); // new
         }
     }
 
@@ -115,6 +124,12 @@ public class HistoryAdapter extends ListAdapter<History, HistoryAdapter.ViewHold
                 .placeholder(R.drawable.ic_history_black_24dp) // add a default drawable
                 .error(R.drawable.ic_password)       // add an error drawable
                 .into(holder.imageView);
+
+        holder.btnDelete.setOnClickListener(v -> {
+            if (deleteListener != null) {
+                deleteListener.onDelete(history);
+            }
+        });
     }
 }
 

@@ -83,4 +83,17 @@ public class FirestoreHelper {
                     callback.onFailure(e);
                 });
     }
+
+    // FirestoreHelper.java
+    public void deleteHistory(History history, ResultCallback<Boolean> callback) {
+        String docName = history.getVariantName() + "_" + history.getTimestamp();
+        db.collection("users")
+                .document(uid)
+                .collection("history")
+                .document(docName)  // use timestamp as the docId
+                .delete()
+                .addOnSuccessListener(aVoid -> callback.onSuccess(true))
+                .addOnFailureListener(callback::onFailure);
+    }
+
 }
