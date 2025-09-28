@@ -24,32 +24,6 @@
         app:navGraph="@navigation/mobile_navigation"
         app:defaultNavHost="true" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        app:srcCompat="@drawable/ic_add_green_24dp"
-        android:backgroundTint="@color/white"
-        android:layout_gravity="end"
-        android:layout_margin="15dp"
-        android:contentDescription="@string/fab_add_des"
-        />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_camera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        app:srcCompat="@drawable/ic_camera_green_24dp"
-        android:backgroundTint="@color/white"
-        android:layout_gravity="end"
-        android:layout_margin="15dp"
-        android:contentDescription="@string/fab_cam_des"
-        />
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navView"
         android:layout_width="match_parent"

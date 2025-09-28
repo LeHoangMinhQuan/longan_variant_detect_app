@@ -3,6 +3,8 @@ package com.example.phnloinhn.src.Model;
 // History.java
 import com.google.firebase.Timestamp;
 
+import java.util.Objects;
+
 public class History {
     private String variantName;
     private String imageUrl;
@@ -25,5 +27,18 @@ public class History {
 
     public String getTimestamp() { return timestamp; }
     public void setTimestamp(String timestamp) { this.timestamp = timestamp; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        History history = (History) o;
+        return Objects.equals(getVariantName(), history.getVariantName()) && Objects.equals(getImageUrl(), history.getImageUrl()) && Objects.equals(getTimestamp(), history.getTimestamp());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getVariantName(), getImageUrl(), getTimestamp());
+    }
 }
 

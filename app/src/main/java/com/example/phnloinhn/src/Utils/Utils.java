@@ -15,7 +15,7 @@ public class Utils {
     public static final String IDO = "ido";
     public static final String TIEU = "tieu";
     public static final String XUONG = "xuong";
-    public static final String THANH_NHAN = "thanh nhan";
+    public static final String THANH_NHAN = "thanh_nhan";
 
     /**
      * Show loading dialog
