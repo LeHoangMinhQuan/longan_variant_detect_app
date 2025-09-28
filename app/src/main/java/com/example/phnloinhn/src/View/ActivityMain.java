@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -32,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +49,8 @@ public class ActivityMain extends AppCompatActivity {
     private MobilenetClassifier classifier;
 
     private ActivityResultLauncher<Intent> pickImageLauncher;
-
+    private ActivityResultLauncher<Uri> takePictureLauncher;
+    private Uri photoUri;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,15 +157,49 @@ public class ActivityMain extends AppCompatActivity {
                     }
                 }
         );
+        takePictureLauncher = registerForActivityResult(
+                new ActivityResultContracts.TakePicture(),
+                success -> {
+                    if (success && photoUri != null) {
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photoUri);
+                            Log.d("TFLITE_RAW", "Classify from Camera");
 
-        // ✅ Khi bấm fabAdd thì mở thư viện ảnh
+                            List<MobilenetClassifier.Recognition> predictions = classifier.classify(bitmap);
+
+                            if (!predictions.isEmpty()) {
+                                MobilenetClassifier.Recognition topResult = predictions.get(0);
+                                Toast.makeText(this, "Kết quả: " + topResult.getTitle() + " (" + topResult.getConfidence() + ")", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(this, "Không dự đoán được", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(this, "Không đọc được ảnh", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "Không chụp được ảnh", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+
         binding.fabAdd.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             pickImageLauncher.launch(Intent.createChooser(intent, "Chọn ảnh"));
         });
+        binding.fabCamera.setOnClickListener(v -> {
+            // Create temporary file for camera image
+            File photoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_photo.jpg");
+            photoUri = FileProvider.getUriForFile(
+                    this,
+                    getPackageName() + ".provider", // must match provider in AndroidManifest
+                    photoFile
+            );
+            takePictureLauncher.launch(photoUri);
+        });
     }
-
     // menu trên toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
