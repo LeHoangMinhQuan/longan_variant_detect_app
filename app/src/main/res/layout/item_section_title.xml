@@ -4,4 +4,4 @@
     android:layout_height="wrap_content"
     android:paddingTop="24dp"
     android:paddingBottom="8dp"
-    style="@style/TextAppearance.Material3.HeadlineSmall"/>
+    style="@style/TextAppearance.Material3.TitleLarge"/>

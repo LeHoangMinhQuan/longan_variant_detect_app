@@ -13,12 +13,12 @@
         <item name="colorSecondary">@color/button_secondary</item>
         <item name="colorSecondaryVariant">@color/background_white</item>
         <item name="colorOnSecondary">@color/plant_green</item>
+        <item name="android:textColorSecondary">@color/cardview_dark_background</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- FAB icon tint fix -->
         <item name="colorControlNormal">@null</item>
 
-        <item name="android:background">@color/white</item>
-        <item name="android:textColorSecondary">@color/cardview_dark_background</item>
+        <item name="colorError">@color/warning</item>
     </style>
 </resources>

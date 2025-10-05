@@ -36,7 +36,7 @@
     <string name="tvBullet_noLabel">• %1$s</string>
     <string name="note_title">Lưu ý khi chụp:</string>
     <string name="note_1">Chụp ảnh rõ nét, đủ ánh sáng.</string>
-    <string name="note_2">Mỗi ảnh chỉ nên có 1–2 lá để dễ nhận diện.</string>
+    <string name="note_2">Mỗi ảnh chỉ nên có 1 lá để dễ nhận diện.</string>
     <string name="note_3">Lá cần chiếm trên 70% diện tích tấm ảnh.</string>
     <string name="guide_title">Hướng dẫn sử dụng:</string>
     <string name="guide_1">Ấn %1$s để chụp ảnh trực tiếp bằng điện thoại.</string>

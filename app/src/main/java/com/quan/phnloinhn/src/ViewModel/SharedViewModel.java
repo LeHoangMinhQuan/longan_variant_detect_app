@@ -19,13 +19,11 @@ import com.quan.phnloinhn.src.Utils.Utils;
 import com.quan.phnloinhn.src.ml.ClassifierRepository;
 import com.quan.phnloinhn.src.ml.MobilenetClassifier;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;

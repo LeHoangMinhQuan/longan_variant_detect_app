@@ -4,4 +4,4 @@
     android:layout_height="wrap_content"
     android:paddingStart="32dp"
     android:paddingVertical="2dp"
-    style="@style/TextAppearance.Material3.BodySmall"/>
+    style="@style/TextAppearance.Material3.BodyMedium"/>

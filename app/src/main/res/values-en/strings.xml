@@ -35,7 +35,7 @@
     <string name="tvBullet_noLabel">• %1$s</string>
     <string name="note_title">Tips for capturing:</string>
     <string name="note_1">Take clear, well-lit photos.</string>
-    <string name="note_2">Each photo should contain only 1–2 leaves for accurate recognition.</string>
+    <string name="note_2">Each photo should contain only 1 leaves for accurate recognition.</string>
     <string name="note_3">The leaf should cover more than 70% of the photo area.</string>
     <string name="guide_title">How to use:</string>
     <string name="guide_1">Tap %1$s to take a photo with your phone.</string>

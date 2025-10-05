@@ -317,10 +317,14 @@ public class FragmentHome extends Fragment {
 
 
     private void addParagraph(String title, String value) {
-        if (value == null || value.trim().isEmpty()) return;
+        if (value == null) return;
         ItemParagraphBinding itemBinding = ItemParagraphBinding.inflate(getLayoutInflater(), binding.container, false);
         itemBinding.tvParagraphTitle.setText(title);
-        itemBinding.tvParagraphText.setText(value);
+        if(value.trim().isEmpty()){
+            itemBinding.tvParagraphText.setVisibility(GONE);
+        } else {
+            itemBinding.tvParagraphText.setText(value);
+        }
         binding.container.addView(itemBinding.getRoot());
     }
 
