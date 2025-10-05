@@ -17,8 +17,30 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- FAB icon tint fix -->
-        <item name="colorControlNormal">@null</item>
+        <item name="colorControlNormal">@color/transparent</item>
 
         <item name="colorError">@color/warning</item>
+    </style>
+    <!-- Styles for bullet points -->
+    <style name="BulletPointLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginBottom">4dp</item>
+    </style>
+
+    <style name="BulletPointIcon">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:tint">@color/plant_green</item>
+    </style>
+
+    <style name="BulletPointText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/text_color_light</item>
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>

@@ -49,4 +49,8 @@
     <string name="guest_login_title">Login as Guest</string>
     <string name="forgot_password_title">Forgot password</string>
     <string name="send_email_title">Send email</string>
+    <string name="general_label">GENERAL</string>
+    <string name="des_label">DESCRIPTION</string>
+    <string name="tips_label">TIPS</string>
+    <string name="growing_label">GROWING METHODS</string>
 </resources>

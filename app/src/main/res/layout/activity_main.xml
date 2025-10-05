@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     tools:context=".src.View.ActivityMain"
+    android:background="@color/transparent_card_background"
     >
 
     <include

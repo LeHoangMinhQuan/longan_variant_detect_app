@@ -49,4 +49,8 @@
     <string name="guest_login_title">Đăng nhập với Khách</string>
     <string name="forgot_password_title">Quên mật khẩu</string>
     <string name="send_email_title">Gửi email</string>
+    <string name="growing_label">PHƯƠNG PHÁP TRỒNG</string>
+    <string name="general_label">THÔNG TIN CHUNG</string>
+    <string name="des_label">MIÊU TẢ</string>
+    <string name="tips_label">MẸO NHỎ</string>
 </resources>

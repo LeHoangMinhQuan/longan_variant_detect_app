@@ -2,61 +2,207 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".src.View.Fragment.FragmentHome"
-    android:id="@+id/fragment_home">
+    tools:context=".src.View.Fragment.FragmentHome">
 
+    <!-- Scrollable CardView -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="10dp"
-        android:contentDescription="Scroll View">
-        <LinearLayout
-            android:id="@+id/container"
-            android:orientation="vertical"
+        android:padding="10dp">
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="?android:attr/dividerHorizontal"
-            android:showDividers="middle">
+            android:minHeight="0dp"
+            android:layout_gravity="fill_vertical"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="@color/white">
 
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Plant Name -->
+                <TextView
+                    android:id="@+id/plant_name_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ido"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_color_dark"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Plant Image -->
+                <ImageView
+                    android:id="@+id/plant_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center_horizontal"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ido"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Information Section -->
+                <LinearLayout
+                    android:id="@+id/info_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <!-- General Information -->
+                    <TextView
+                        android:id="@+id/general"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/general_label"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color_dark"
+                        android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout style="@style/BulletPointLayout">
+                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_1" app:srcCompat="@drawable/ic_leaf_small"/>
+                        <TextView style="@style/BulletPointText" android:id="@+id/plant_origin" android:text="Origin: Thái Lan"/>
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/BulletPointLayout">
+                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_2" app:srcCompat="@drawable/ic_leaf_small"/>
+                        <TextView style="@style/BulletPointText" android:id="@+id/plant_productivity" android:text="Productivity: 70-100 tấn"/>
+                    </LinearLayout>
+
+                    <!-- Description -->
+                    <TextView
+                        android:id="@+id/description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/des_label"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color_dark"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout style="@style/BulletPointLayout">
+                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_3" app:srcCompat="@drawable/ic_leaf_small"/>
+                        <TextView style="@style/BulletPointText" android:id="@+id/plant_description"
+                            android:text="Phát triển nhanh, ít sâu bệnh, năng suất cao và tỷ lệ nhiễm bệnh chổi rồng rất thấp. Hạt nhỏ, cơm dầy và giòn, ít nước, độ ngọt vừa phải, được chọn xuất sang thị trường châu Âu và châu Mỹ."/>
+                    </LinearLayout>
+
+                    <!-- Tips -->
+                    <TextView
+                        android:id="@+id/tips"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tips_label"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color_dark"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout style="@style/BulletPointLayout">
+                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_4" app:srcCompat="@drawable/ic_leaf_small"/>
+                        <TextView style="@style/BulletPointText" android:id="@+id/plant_tips"
+                            android:text="Nhãn Thái Lan thường xuất bán vào thời điểm tháng 7 và rằm tháng 10 âm lịch, bạn nên né tránh thu hoạch nhãn vào các thời điểm này để tránh gặp cảnh “hàng nhiều dội chợ”. 1 điều quan trọng sau khi thu hoạch là cần tiến hành cắt tỉa cành già, cành khô héo, bón thêm phân để cây đâm tược chờ mùa sau."/>
+                    </LinearLayout>
+
+                    <!-- Growing Methods -->
+                    <TextView
+                        android:id="@+id/growing_methods"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/growing_label"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color_dark"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout style="@style/BulletPointLayout">
+                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_5" app:srcCompat="@drawable/ic_leaf_small"/>
+                        <TextView style="@style/BulletPointText" android:id="@+id/branch_pruning" android:text="- Branch pruning: N/A"/>
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/BulletPointLayout">
+                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_6" app:srcCompat="@drawable/ic_leaf_small"/>
+                        <TextView style="@style/BulletPointText" android:id="@+id/fertilizer" android:text="- Fertilizer: N/A"/>
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/BulletPointLayout">
+                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_7" app:srcCompat="@drawable/ic_leaf_small"/>
+                        <TextView style="@style/BulletPointText" android:id="@+id/fruit_pruning" android:text="- Fruit pruning: N/A"/>
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/BulletPointLayout">
+                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_8"  app:srcCompat="@drawable/ic_leaf_small"/>
+                        <TextView style="@style/BulletPointText" android:id="@+id/pesticide" android:text="- Pesticide: N/A"/>
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/BulletPointLayout">
+                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_9" app:srcCompat="@drawable/ic_leaf_small"/>
+                        <TextView style="@style/BulletPointText" android:id="@+id/plant_distance" android:text="- Plant distance: N/A"/>
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/BulletPointLayout">
+                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_10" app:srcCompat="@drawable/ic_leaf_small"/>
+                        <TextView style="@style/BulletPointText" android:id="@+id/plant_time" android:text="- Plant time: N/A"/>
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/BulletPointLayout">
+                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_11" app:srcCompat="@drawable/ic_leaf_small"/>
+                        <TextView style="@style/BulletPointText" android:id="@+id/soil" android:text="- Soil: N/A"/>
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/BulletPointLayout">
+                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_12" app:srcCompat="@drawable/ic_leaf_small"/>
+                        <TextView style="@style/BulletPointText" android:id="@+id/other" android:text="- Other: N/A"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/init_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </androidx.cardview.widget.CardView>
     </ScrollView>
 
-    <!-- FABs container -->
+    <!-- Floating Action Buttons -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:gravity="end">
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                app:srcCompat="@drawable/ic_add_green_24dp"
-                android:backgroundTint="@color/white"
-                android:layout_gravity="end"
-                android:layout_margin="15dp"
-                android:contentDescription="@string/fab_add_des"
-                />
+        android:padding="16dp"
+        android:clipToPadding="false">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_camera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                app:srcCompat="@drawable/ic_camera_green_24dp"
-                android:backgroundTint="@color/white"
-                android:layout_gravity="end"
-                android:layout_margin="15dp"
-                android:contentDescription="@string/fab_cam_des"
-                />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:srcCompat="@drawable/ic_add_green_24dp"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/fab_add_des" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_camera_green_24dp"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/fab_cam_des" />
+
     </LinearLayout>
 
 </FrameLayout>

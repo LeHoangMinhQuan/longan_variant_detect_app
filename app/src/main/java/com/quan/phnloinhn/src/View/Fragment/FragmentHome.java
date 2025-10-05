@@ -35,6 +35,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.quan.phnloinhn.R;
@@ -42,7 +44,6 @@ import com.quan.phnloinhn.databinding.FragmentHomeBinding;
 import com.quan.phnloinhn.databinding.ItemBulletBinding;
 import com.quan.phnloinhn.databinding.ItemImageBinding;
 import com.quan.phnloinhn.databinding.ItemParagraphBinding;
-import com.quan.phnloinhn.databinding.ItemSectionTitleBinding;
 import com.quan.phnloinhn.src.Model.GrowingMethod;
 import com.quan.phnloinhn.src.Model.LonganVariant;
 import com.quan.phnloinhn.src.ViewModel.SharedViewModel;
@@ -94,7 +95,6 @@ public class FragmentHome extends Fragment {
             @Override
             public void handleOnBackPressed() {
                 // Clear dynamic content and show initial instructions again
-                binding.container.removeAllViews();
                 displayInitialInformation();
             }
         };
@@ -138,7 +138,6 @@ public class FragmentHome extends Fragment {
                                 bitmap = MediaStore.Images.Media.getBitmap(
                                         requireContext().getContentResolver(), imageUri);
                             }
-
                             // 🔍 Send bitmap to your ViewModel or use it
                             viewModel.classifyImage(bitmap, imageUri);
 
@@ -236,105 +235,132 @@ public class FragmentHome extends Fragment {
 
     private void displayInitialInformation() {
         callback.setEnabled(false);
-        binding.container.removeAllViews();
 
-        // Add fab buttons
-        binding.fabAdd.setVisibility(VISIBLE);
-        binding.fabAdd.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
-        binding.fabCamera.setVisibility(VISIBLE);
-        binding.fabCamera.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+        // Show FABs
+        binding.fabAdd.setVisibility(View.VISIBLE);
+        binding.fabCamera.setVisibility(View.VISIBLE);
 
-        // Notes
+        // Hide all plant info
+        setVisible(binding.plantNameTitle, null, false);
+        setVisible(null, binding.plantImage, false);
+
+        setVisible(binding.general, null, false);
+        setVisible(binding.description, null, false);
+        setVisible(binding.tips, null, false);
+        setVisible(binding.growingMethods, null, false);
+
+        setVisible(binding.plantOrigin, binding.img1, false);
+        setVisible(binding.plantProductivity, binding.img2, false);
+        setVisible(binding.plantDescription, binding.img3, false);
+        setVisible(binding.plantTips, binding.img4, false);
+        setVisible(binding.branchPruning, binding.img5, false);
+        setVisible(binding.fertilizer, binding.img6, false);
+        setVisible(binding.fruitPruning, binding.img7, false);
+        setVisible(binding.pesticide, binding.img8, false);
+        setVisible(binding.plantDistance, binding.img9, false);
+        setVisible(binding.plantTime, binding.img10, false);
+        setVisible(binding.soil, binding.img11, false);
+        setVisible(binding.other, binding.img12, false);
+
+        // Show notes dynamically
         addParagraph(getString(R.string.note_title), "");
         addNoTitleBullet(R.string.note_1, 0);
         addNoTitleBullet(R.string.note_2, 0);
         addNoTitleBullet(R.string.note_3, 0);
-
-        // Guides
         addParagraph(getString(R.string.guide_title), "");
-
-        // Insert camera button inline
         addNoTitleBullet(R.string.guide_1, R.drawable.ic_camera_green_24dp);
-        // Insert gallery button inline
         addNoTitleBullet(R.string.guide_2, R.drawable.ic_add_green_24dp);
-
     }
-
     private void displayVariant(LonganVariant variant) {
-        binding.container.removeAllViews();
+        // Enable callback
+        callback.setEnabled(true);
+        // Hide FABs
+        binding.fabAdd.setVisibility(View.GONE);
+        binding.fabCamera.setVisibility(View.GONE);
 
-        // Hide and disable fab buttons until back to initial screen
-        binding.fabAdd.setVisibility(GONE);
-        binding.fabAdd.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-        binding.fabCamera.setVisibility(GONE);
-        binding.fabCamera.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        // Hide init info
+        binding.initSection.setVisibility(GONE);
 
-        // Section: Name
-        addSectionTitle(variant.getName());
+        // Show basic plant info
+        setVisible(binding.plantNameTitle, null, true);
+        Log.d("Image","getImageResourceByName(variant.getName()) :" + getImageResourceByName(variant.getName()));
+        binding.plantImage.setImageResource(getImageResourceByName(variant.getName()));
+        setVisible(null, binding.plantImage, true);
+        setVisible(binding.general, null, true);
+        setVisible(binding.description, null, true);
+        setVisible(binding.tips, null, true);
 
-        // Image
-        addImageView(variant.getName());
+        setVisible(binding.plantOrigin, binding.img1, true);
+        setVisible(binding.plantProductivity, binding.img2, true);
+        setVisible(binding.plantDescription, binding.img3, true);
+        setVisible(binding.plantTips, binding.img4, true);
 
-        // Paragraphs (localized titles)
-        addParagraph(getString(R.string.variant_origin), variant.getOrigin());
-        addParagraph(getString(R.string.variant_productivity), variant.getProductivity());
-        addParagraph(getString(R.string.variant_description), variant.getDescription());
-        addParagraph(getString(R.string.variant_tips), variant.getTips());
+        // Set plant info
+        binding.plantNameTitle.setText(variant.getName());
+        binding.plantImage.setImageResource(getImageResourceByName(variant.getName()));
+        binding.plantOrigin.setText(variant.getOrigin());
+        binding.plantProductivity.setText(variant.getProductivity());
+        binding.plantDescription.setText(variant.getDescription());
+        binding.plantTips.setText(variant.getTips());
 
-        if (variant.getGrowingMethods() != null) {
-            for (Map.Entry<String, GrowingMethod> entry : variant.getGrowingMethods().entrySet()) {
-                String methodName = entry.getKey();
-                GrowingMethod method = entry.getValue();
+        // Growing Methods
+        if (variant.getGrowingMethods() != null && !variant.getGrowingMethods().isEmpty()) {
+            GrowingMethod method = variant.getGrowingMethods().values().iterator().next();
 
-                addSectionTitle(getString(R.string.variant_growing_method, methodName));
+            setVisible(binding.growingMethods, null, true);
+            setVisible(binding.branchPruning, binding.img5, true);
+            setVisible(binding.fertilizer, binding.img6, true);
+            setVisible(binding.fruitPruning, binding.img7, true);
+            setVisible(binding.pesticide, binding.img8, true);
+            setVisible(binding.plantDistance, binding.img9, true);
+            setVisible(binding.plantTime, binding.img10, true);
+            setVisible(binding.soil, binding.img11, true);
+            setVisible(binding.other, binding.img12, true);
 
-                addBullet(getString(R.string.growing_branch_pruning), method.getBranch_pruning());
-                addBullet(getString(R.string.growing_fertilizer), method.getFertilizer());
-                addBullet(getString(R.string.growing_fruit_pruning), method.getFruit_pruning());
-                addBullet(getString(R.string.growing_pesticide), method.getPesticide());
-                addBullet(getString(R.string.growing_plant_distance), method.getPlant_distance());
-                addBullet(getString(R.string.growing_plant_time), method.getPlant_time());
-                addBullet(getString(R.string.growing_soil), method.getSoil());
-                addBullet(getString(R.string.growing_other), method.getOther());
-            }
+            binding.branchPruning.setText(method.getBranch_pruning());
+            binding.fertilizer.setText(method.getFertilizer());
+            binding.fruitPruning.setText(method.getFruit_pruning());
+            binding.pesticide.setText(method.getPesticide());
+            binding.plantDistance.setText(method.getPlant_distance());
+            binding.plantTime.setText(method.getPlant_time());
+            binding.soil.setText(method.getSoil());
+            binding.other.setText(method.getOther());
         }
     }
 
-    private void addSectionTitle(String text) {
-        ItemSectionTitleBinding itemBinding = ItemSectionTitleBinding.inflate(getLayoutInflater(), binding.container, false);
-        itemBinding.tvSectionTitle.setText(text);
-        binding.container.addView(itemBinding.getRoot());
-    }
-    private void addImageView(String variantName) {
-        String variant_id = VARIANT_ID.get(variantName);
-        Integer resId = VARIANT_IMAGES.get(variant_id);
-        if (resId != null) {
-            ItemImageBinding itemBinding = ItemImageBinding.inflate(getLayoutInflater(), binding.container, false);
-            itemBinding.ivVariant.setImageResource(resId);
-            binding.container.addView(itemBinding.getRoot());
+    // Helper method to get drawable by plant name
+    private int getImageResourceByName(String variantName) {
+        String resName = VARIANT_ID.get(variantName); // get mapped resource name
+        if (resName == null) {
+            Log.d("Image", "No mapping found for variant: " + variantName);
+            return R.drawable.ic_clear; // fallback image
         }
+
+        // Resource name in drawable
+        int resId = getResources().getIdentifier(resName, "drawable", requireContext().getPackageName());
+
+        Log.d("Image", "Variant: " + variantName + ", ResName: " + resName + ", ResId: " + resId);
+
+        return resId != 0 ? resId : R.drawable.ic_clear;
     }
 
 
+    private void setVisible(TextView textView, ImageView imageView, boolean visible) {
+        int visibility = visible ? View.VISIBLE : View.GONE;
+        if (textView != null) textView.setVisibility(visibility);
+        if (imageView != null) imageView.setVisibility(visibility);
+    }
     private void addParagraph(String title, String value) {
         if (value == null) return;
-        ItemParagraphBinding itemBinding = ItemParagraphBinding.inflate(getLayoutInflater(), binding.container, false);
+        ItemParagraphBinding itemBinding = ItemParagraphBinding.inflate(getLayoutInflater(), binding.initSection, false);
         itemBinding.tvParagraphTitle.setText(title);
         if(value.trim().isEmpty()){
             itemBinding.tvParagraphText.setVisibility(GONE);
         } else {
             itemBinding.tvParagraphText.setText(value);
         }
-        binding.container.addView(itemBinding.getRoot());
+        binding.initSection.addView(itemBinding.getRoot());
     }
-
-    private void addBullet(String label, String value) {
-        if (value == null || value.trim().isEmpty()) return;
-        ItemBulletBinding itemBinding = ItemBulletBinding.inflate(getLayoutInflater(), binding.container, false);
-        itemBinding.tvBullet.setText(getString(R.string.tvBullet, label, value));
-        binding.container.addView(itemBinding.getRoot());
-    }
-
     /*
     * @DrawableRes int drawableResId: R.drawable.{icon} / 0*/
     private void addNoTitleBullet(@StringRes int textResId, @DrawableRes int drawableResId) {
@@ -351,7 +377,7 @@ public class FragmentHome extends Fragment {
 
             @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = requireContext().getDrawable(drawableResId);
             if (drawable != null) {
-                int lineHeight = (int) binding.container.getResources()
+                int lineHeight = (int) binding.initSection.getResources()
                         .getDimension(R.dimen.inline_icon_size);
                 drawable.setBounds(0, 0, lineHeight, lineHeight);
 
@@ -365,8 +391,8 @@ public class FragmentHome extends Fragment {
         }
 
         ItemBulletBinding itemBinding =
-                ItemBulletBinding.inflate(getLayoutInflater(), binding.container, false);
+                ItemBulletBinding.inflate(getLayoutInflater(), binding.initSection, false);
         itemBinding.tvBullet.setText(spannable);
-        binding.container.addView(itemBinding.getRoot());
+        binding.initSection.addView(itemBinding.getRoot());
     }
 }
