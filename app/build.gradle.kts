@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.phnloinhn"
+    namespace = "com.quan.phnloinhn"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.phnloinhn"
+        applicationId = "com.quan.phnloinhn"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

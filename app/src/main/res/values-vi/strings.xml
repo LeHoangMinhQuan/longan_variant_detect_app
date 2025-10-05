@@ -9,13 +9,13 @@
     <string name="title_notifications">Thông báo</string>
     <string name="fab_cam_des">Chụp ảnh</string>
     <string name="fab_add_des">Tải ảnh lên</string>
-    <string name="default_web_client_id">87450574837-qcoo6rrnv5nsj6c4i5i04lcrg90mtvkq.apps.googleusercontent.com</string>
+    <string name="default_web_client_id">87450574837-90ikq56pp9372kfce2hm46o4lnhj87l1.apps.googleusercontent.com</string>
+    <string name="android_client_id">87450574837-qu08nvli42poc8gv5kb906uacnn5edht.apps.googleusercontent.com</string>
     <string name="logout_title">Đăng xuất</string>
     <string name="email_hint">Nhập email</string>
     <string name="password_hint">Nhập mật khẩu</string>
     <string name="login_title">Đăng nhập</string>
     <string name="signin_title">Đăng ký</string>
-    <string name="other_login_title">Đăng nhập với Google hoặc Khách</string>
     <string name="forgot_password_text">Quên mật khẩu?</string>
     <string name="variant_name">%s</string>
     <string name="variant_origin">Xuất xứ</string>
@@ -45,4 +45,8 @@
     <string name="xuong">Nhãn xuồng</string>
     <string name="tieu">Nhãn tiêu</string>
     <string name="thanh_nhan">Thanh nhãn</string>
+    <string name="google_login_title">Đăng nhập với Google</string>
+    <string name="guest_login_title">Đăng nhập với Khách</string>
+    <string name="forgot_password_title">Quên mật khẩu</string>
+    <string name="send_email_title">Gửi email</string>
 </resources>

@@ -9,13 +9,13 @@
     <string name="title_notifications">Notifications</string>
     <string name="fab_cam_des">Take picture</string>
     <string name="fab_add_des">Image Upload</string>
-    <string name="default_web_client_id">87450574837-qcoo6rrnv5nsj6c4i5i04lcrg90mtvkq.apps.googleusercontent.com</string>
+    <string name="default_web_client_id">87450574837-90ikq56pp9372kfce2hm46o4lnhj87l1.apps.googleusercontent.com</string>
+    <string name="android_client_id">87450574837-qu08nvli42poc8gv5kb906uacnn5edht.apps.googleusercontent.com</string>
     <string name="logout_title">Log out</string>
     <string name="email_hint">Enter email</string>
     <string name="password_hint">Enter password</string>
     <string name="login_title">Login</string>
     <string name="signin_title">Sign Up</string>
-    <string name="other_login_title">Login with Google or Guest</string>
     <string name="forgot_password_text">Forgot password?</string>
     <string name="variant_name">%s</string>
     <string name="variant_origin">Origin</string>
@@ -45,4 +45,8 @@
     <string name="xuong">Xuong</string>
     <string name="tieu">Tieu</string>
     <string name="thanh_nhan">Thanh nhan</string>
+    <string name="google_login_title">Login with Google</string>
+    <string name="guest_login_title">Login as Guest</string>
+    <string name="forgot_password_title">Forgot password</string>
+    <string name="send_email_title">Send email</string>
 </resources>

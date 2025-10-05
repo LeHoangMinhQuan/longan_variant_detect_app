@@ -1,30 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_bg"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".src.View.ActivityLogin">
+    android:background="@drawable/longan_leaves_background"
+    tools:context=".src.View.ActivityLogin"
+    android:id="@+id/activity_login"
+    >
 
+    <!-- Background Image -->
+    <ImageView
+        android:id="@+id/background_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/longan_leaves_background"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Login Card -->
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
+        android:id="@+id/loginCard"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        app:cardBackgroundColor="@color/background_white"
-        app:cardCornerRadius="20dp"
+        android:layout_margin="32dp"
+        app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
-        android:elevation="8dp">
+        app:cardBackgroundColor="@color/transparent_card_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/table_item_background"
             android:orientation="vertical"
             android:padding="24dp">
 
@@ -61,117 +75,151 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <EditText
-                android:id="@+id/editText_username"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/custom_edit_text"
-                android:drawableStart="@drawable/ic_username"
-                android:drawablePadding="4dp"
-                android:ems="10"
-                android:hint="@string/email_hint"
-                android:inputType="textEmailAddress"
-                android:padding="8dp"
-                android:textColorHint="@color/black" />
-
-            <TextView
-                android:id="@+id/invalidEmailWarning"
+            <!-- Username -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Email không đúng định dạng"
-                android:textColor="@color/warning"
-                android:visibility="gone"/>
+                android:layout_marginBottom="10dp"
+                android:id="@+id/textInputLayoutUsername"
+                app:startIconDrawable="@drawable/ic_person"
+                app:endIconDrawable="@drawable/ic_clear"
+                app:endIconTint="@color/plant_green"
+                app:endIconMode="clear_text"
+                app:boxStrokeColor="@color/plant_green"
+                app:hintTextColor="@color/plant_green"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true"
+                app:errorEnabled="true"
+                >
 
-            <EditText
-                android:id="@+id/editText_password"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editText_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="50dp"
+                    android:hint="@string/email_hint"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Password -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/custom_edit_text"
-                android:drawableStart="@drawable/ic_password"
-                android:drawablePadding="10dp"
-                android:ems="10"
-                android:hint="@string/password_hint"
-                android:inputType="textPassword"
-                android:padding="8dp"
-                android:textColorHint="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/textInputLayoutPassword"
+                app:startIconDrawable="@drawable/ic_lock"
+                app:endIconMode="password_toggle"
+                app:boxStrokeColor="@color/plant_green"
+                app:hintTextColor="@color/plant_green"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true"
+                app:counterEnabled="true"
+                app:counterMaxLength="15"
+                app:errorEnabled="true">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editText_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="50dp"
+                    android:hint="@string/password_hint"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Forgot Password -->
             <TextView
                 android:id="@+id/forgotPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="5dp"
                 android:text="@string/forgot_password_text"
-                android:textStyle="bold"
-                android:textColor="@color/slight_green"/>
+                android:textColor="@color/plant_green"
+                android:layout_gravity="end"
+                android:layout_marginBottom="20dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp" />
 
-            <TextView
-                android:id="@+id/invalidPasswordWarning"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:text="Mật khẩu cần có tối thiểu 8 ký tự, với chữ in hoa, số và ký tự đặc biệt như !, @, #,..."
-                android:textColor="@color/warning"
-                android:visibility="gone"/>
 
+            <!-- Login Button -->
             <Button
                 android:id="@+id/login_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/primary_button"
                 android:text="@string/login_title"
-                android:textColor="@color/background_white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:elevation="10dp"/>
+                android:backgroundTint="@color/plant_green"
+                android:textColor="@color/white"
+                android:paddingVertical="12dp"
+                android:layout_marginBottom="15dp"/>
 
+            <!-- Divider with "or" -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/divider_layout">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/grey"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" or "
+                    android:textColor="@color/text_color_light"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/grey"/>
+            </LinearLayout>
+
+            <!-- Login with Google -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/firebaseUiLoginButton"
+                android:id="@+id/buttonLoginGoogle"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/other_login_title"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:background="@drawable/secondary_button"
-                android:elevation="5dp"/>
+                android:text="@string/google_login_title"
+                android:textColor="@color/text_color_dark"
+                app:icon="@drawable/fui_ic_googleg_color_24dp"
+                app:iconTint="@null"
+                app:strokeColor="@color/grey"
+                android:paddingVertical="12dp"
+                android:layout_marginBottom="10dp"/>
 
-            <com.google.android.material.divider.MaterialDivider
+            <!-- Login as Guest -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonLoginGuest"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:dividerThickness="2dp"
-                app:dividerInsetStart="20dp"
-                app:dividerInsetEnd="20dp"/>
+                android:text="@string/guest_login_title"
+                android:textColor="@color/text_color_dark"
+                app:icon="@drawable/fui_ic_anonymous_white_24dp"
+                app:iconTint="@color/plant_green"
+                app:strokeColor="@color/grey"
+                android:paddingVertical="12dp"
+                android:layout_marginBottom="10dp"/>
 
+            <!-- Sign Up Button -->
             <Button
                 android:id="@+id/signup_switch"
-                android:layout_width="match_parent"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/primary_button"
                 android:text="@string/signin_title"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/background_white"/>
-
-            <Button
-                android:id="@+id/signup_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/primary_button"
-                android:text="@string/signin_title"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:visibility="gone"/>
-
+                android:textColor="@color/plant_green"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

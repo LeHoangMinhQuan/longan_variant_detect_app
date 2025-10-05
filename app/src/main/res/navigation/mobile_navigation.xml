@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_fragmentHome"
-        android:name="com.example.phnloinhn.src.View.Fragment.FragmentHome"
+        android:name="com.quan.phnloinhn.src.View.Fragment.FragmentHome"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_fragmentProfile"
-        android:name="com.example.phnloinhn.src.View.Fragment.FragmentProfile"
+        android:name="com.quan.phnloinhn.src.View.Fragment.FragmentProfile"
         android:label="Profile"
         tools:layout="@layout/fragment_profile"/>
 
     <fragment
         android:id="@+id/nav_fragmentHistory"
-        android:name="com.example.phnloinhn.src.View.Fragment.FragmentHistory"
+        android:name="com.quan.phnloinhn.src.View.Fragment.FragmentHistory"
         android:label="History"
         tools:layout="@layout/fragment_history"/>
 
