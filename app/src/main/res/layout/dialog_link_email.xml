@@ -13,13 +13,14 @@
         android:padding="24dp">
 
         <TextView
+            android:id="@+id/tv_link_email_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Link to Email"
             android:textColor="@color/text_color_dark"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginBottom="24dp"
+            android:contentDescription="@string/link_email_title_des" />
 
         <!-- Email -->
         <com.google.android.material.textfield.TextInputLayout
@@ -29,18 +30,15 @@
             android:layout_marginBottom="16dp"
             app:startIconDrawable="@drawable/ic_mail"
             app:boxStrokeColor="@color/plant_green"
-            app:hintTextColor="@color/plant_green">
+            app:hintTextColor="@color/plant_green"
+            android:contentDescription="@string/link_email_input_des">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_link_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
-                app:endIconDrawable="@drawable/ic_clear"
-                app:endIconTint="@color/plant_green"
-                app:endIconMode="clear_text"
                 android:inputType="textEmailAddress"
-                android:paddingStart="50dp"/>
+                android:paddingStart="50dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Password -->
@@ -52,25 +50,25 @@
             app:startIconDrawable="@drawable/ic_lock"
             app:endIconMode="password_toggle"
             app:boxStrokeColor="@color/plant_green"
-            app:hintTextColor="@color/plant_green">
+            app:hintTextColor="@color/plant_green"
+            android:contentDescription="@string/link_password_input_des">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_link_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
                 android:inputType="textPassword"
-                android:paddingStart="50dp"/>
+                android:paddingStart="50dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btn_submit_link_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Submit"
             android:backgroundTint="@color/plant_green"
             android:textColor="@color/white"
-            android:paddingVertical="12dp"/>
+            android:paddingVertical="12dp"
+            android:contentDescription="@string/link_submit_button_des" />
 
     </LinearLayout>
 </ScrollView>

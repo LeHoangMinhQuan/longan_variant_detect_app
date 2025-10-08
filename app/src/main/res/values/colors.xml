@@ -15,12 +15,12 @@
     <color name="button_primary">#4CAF50</color>
     <color name="button_secondary">#E0E0E0</color>
     <color name="warning">#E93E33</color>
-    <color name="plant_green">#4CAF50</color> <!-- A common shade of plant green -->
+    <color name="plant_green">#4CAF50</color>
     <color name="plant_green_dark">#388E3C</color>
     <color name="plant_green_light">#81C784</color>
     <color name="black">#000000</color>
     <color name="grey">#CCCCCC</color>
-    <color name="transparent_card_background">#E6FFFFFF</color> <!-- White with 90% opacity for the card -->
+    <color name="transparent_card_background">#E6FFFFFF</color>
     <color name="text_color_dark">#333333</color>
     <color name="text_color_light">#666666</color>
     <color name="transparent">#00000000</color>

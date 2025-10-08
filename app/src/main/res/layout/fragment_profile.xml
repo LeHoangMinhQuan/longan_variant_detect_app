@@ -35,8 +35,8 @@
                 android:layout_marginBottom="16dp"
                 android:src="@drawable/longan_leaves_background"
                 app:strokeWidth="2dp"
-                app:shapeAppearanceOverlay="@style/CircularImageView" />
-
+                app:shapeAppearanceOverlay="@style/CircularImageView"
+                android:contentDescription="@string/profile_avatar_des" />
 
             <!-- Display Name -->
             <TextView
@@ -48,7 +48,8 @@
                 tools:text="John Doe"
                 android:textColor="@color/text_color_dark"
                 android:textSize="22sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:contentDescription="@string/profile_display_name_des" />
 
             <!-- Email -->
             <TextView
@@ -59,16 +60,17 @@
                 android:layout_marginBottom="32dp"
                 tools:text="john.doe@example.com"
                 android:textColor="@color/text_color_light"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:contentDescription="@string/profile_email_des" />
 
-            <!-- Change Password Button (Conditional Visibility) -->
+            <!-- Change Password Button -->
             <Button
                 android:id="@+id/button_change_password"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:text="Change Password"
+                android:text="@string/change_password_text"
                 android:textColor="@color/text_color_dark"
                 app:icon="@drawable/ic_lock"
                 app:iconTint="@color/plant_green"
@@ -80,48 +82,51 @@
                 android:insetLeft="0dp"
                 android:insetTop="0dp"
                 android:insetRight="0dp"
-                android:insetBottom="0dp"/>
+                android:insetBottom="0dp"
+                android:contentDescription="@string/change_password_des" />
 
-            <!-- Change Display Name Button (Conditional Visibility) -->
+            <!-- Change Display Name Button -->
             <Button
                 android:id="@+id/button_change_display_name"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:text="Change Display Name"
+                android:text="@string/change_display_name_text"
                 android:textColor="@color/text_color_dark"
                 app:icon="@drawable/ic_username"
-            app:iconTint="@color/plant_green"
-            app:strokeColor="@color/grey"
-            app:cornerRadius="8dp"
-            android:paddingVertical="12dp"
-            android:gravity="start|center_vertical"
-            android:drawablePadding="16dp"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"/>
+                app:iconTint="@color/plant_green"
+                app:strokeColor="@color/grey"
+                app:cornerRadius="8dp"
+                android:paddingVertical="12dp"
+                android:gravity="start|center_vertical"
+                android:drawablePadding="16dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:contentDescription="@string/change_display_name_des" />
 
-            <!-- Link to Email Button (Conditional Visibility for Anonymous) -->
+            <!-- Link to Email Button -->
             <Button
                 android:id="@+id/button_link_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"
-                android:text="Link to Email"
+                android:text="@string/link_email_text"
                 android:backgroundTint="@color/plant_green_light"
                 android:textColor="@color/white"
                 app:icon="@drawable/ic_mail"
-            app:iconTint="@color/white"
-            app:cornerRadius="8dp"
-            android:paddingVertical="12dp"
-            android:gravity="start|center_vertical"
-            android:drawablePadding="16dp"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"/>
+                app:iconTint="@color/white"
+                app:cornerRadius="8dp"
+                android:paddingVertical="12dp"
+                android:gravity="start|center_vertical"
+                android:drawablePadding="16dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:contentDescription="@string/link_email_des" />
 
             <!-- Log Out Button -->
             <Button
@@ -129,11 +134,12 @@
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Log Out"
+                android:text="@string/log_out_text"
                 android:textColor="@color/design_default_color_error"
                 app:strokeColor="@color/design_default_color_error"
                 app:cornerRadius="8dp"
-                android:paddingVertical="12dp"/>
+                android:paddingVertical="12dp"
+                android:contentDescription="@string/log_out_des" />
 
         </LinearLayout>
 

@@ -86,4 +86,50 @@
     <string name="logout_message">Bạn có chắc muốn đăng xuất không?</string>
     <string name="logout_success">Đã đăng xuất thành công</string>
     <string name="cancel">Hủy</string>
+
+    <string name="plant_image_des">Hình ảnh của cây</string>
+    <string name="icon_leaf_des">Biểu tượng hình lá</string>
+    <string name="login_background">login screen background</string>
+    <string name="or">" or "</string>
+    <string name="change_display_name_title">Thay đổi tên hiển thị</string>
+    <string name="new_display_name_hint">Tên hiển thị mới</string>
+    <string name="submit_button">Xác nhận</string>
+    <string name="input_display_name_des">Trường nhập tên hiển thị mới</string>
+    <string name="submit_button_des">Nút xác nhận thay đổi tên hiển thị</string>
+    <!-- Titles -->
+    <string name="change_password_title">Đổi mật khẩu</string>
+
+    <!-- Hints -->
+    <string name="hint_current_password">Mật khẩu hiện tại</string>
+    <string name="hint_new_password">Mật khẩu mới</string>
+    <string name="hint_confirm_new_password">Xác nhận mật khẩu mới</string>
+
+    <!-- Buttons -->
+    <string name="btn_submit">Xác nhận</string>
+
+    <!-- Content Descriptions -->
+    <string name="content_desc_lock_icon">Biểu tượng khóa</string>
+    <string name="content_desc_toggle_password_visibility">Chuyển đổi hiển thị mật khẩu</string>
+    <string name="link_email_title_des">Tiêu đề liên kết với email</string>
+    <string name="link_email_input_des">Trường nhập địa chỉ email cần liên kết</string>
+    <string name="link_password_input_des">Trường nhập mật khẩu của email cần liên kết</string>
+    <string name="link_submit_button_des">Nút xác nhận liên kết email</string>
+    <!-- Button texts -->
+    <string name="change_password_text">Đổi mật khẩu</string>
+    <string name="change_display_name_text">Đổi tên hiển thị</string>
+    <string name="link_email_text">Liên kết với email</string>
+    <string name="log_out_text">Đăng xuất</string>
+
+    <!-- Content descriptions -->
+    <string name="profile_avatar_des">Ảnh đại diện người dùng</string>
+    <string name="profile_display_name_des">Tên hiển thị của người dùng</string>
+    <string name="profile_email_des">Địa chỉ email của người dùng</string>
+    <string name="change_password_des">Nút để đổi mật khẩu</string>
+    <string name="change_display_name_des">Nút để đổi tên hiển thị</string>
+    <string name="link_email_des">Nút để liên kết tài khoản ẩn danh với email</string>
+    <string name="log_out_des">Nút để đăng xuất tài khoản</string>
+    <string name="delete_label">XÓA</string>
+    <string name="content_desc_delete_icon">Biểu tượng xóa</string>
+    <string name="content_desc_history_image">Hình ảnh mục lịch sử</string>
+    <string name="content_desc_delete_button">Xóa mục lịch sử</string>
 </resources>

@@ -87,4 +87,49 @@
     <string name="logout_message">Are you sure you want to log out?</string>
     <string name="logout_success">Logged out successfully</string>
     <string name="cancel">Cancel</string>
+    <string name="plant_image_des">Image of the plant</string>
+    <string name="icon_leaf_des">Leaf icon bullet</string>
+    <string name="login_background">login screen background</string>
+    <string name="or">" or "</string>
+    <string name="change_display_name_title">Change Display Name</string>
+    <string name="new_display_name_hint">New Display Name</string>
+    <string name="submit_button">Submit</string>
+    <string name="input_display_name_des">Input field for entering new display name</string>
+    <string name="submit_button_des">Button to confirm changing display name</string>
+    <!-- Titles -->
+    <string name="change_password_title">Change Password</string>
+
+    <!-- Hints -->
+    <string name="hint_current_password">Current Password</string>
+    <string name="hint_new_password">New Password</string>
+    <string name="hint_confirm_new_password">Confirm New Password</string>
+
+    <!-- Buttons -->
+    <string name="btn_submit">Submit</string>
+
+    <!-- Content Descriptions -->
+    <string name="content_desc_lock_icon">Lock icon</string>
+    <string name="content_desc_toggle_password_visibility">Toggle password visibility</string>
+    <string name="link_email_title_des">Title text for linking to email</string>
+    <string name="link_email_input_des">Input field for entering the email to link</string>
+    <string name="link_password_input_des">Input field for entering the password associated with the email</string>
+    <string name="link_submit_button_des">Button to confirm linking the email</string>
+    <!-- Button texts -->
+    <string name="change_password_text">Change Password</string>
+    <string name="change_display_name_text">Change Display Name</string>
+    <string name="link_email_text">Link to Email</string>
+    <string name="log_out_text">Log Out</string>
+
+    <!-- Content descriptions -->
+    <string name="profile_avatar_des">User profile avatar image</string>
+    <string name="profile_display_name_des">User display name text</string>
+    <string name="profile_email_des">User email text</string>
+    <string name="change_password_des">Button to change user password</string>
+    <string name="change_display_name_des">Button to change user display name</string>
+    <string name="link_email_des">Button to link anonymous account to an email</string>
+    <string name="log_out_des">Button to log out of the account</string>
+    <string name="delete_label">DELETE</string>
+    <string name="content_desc_delete_icon">Delete icon</string>
+    <string name="content_desc_history_image">History item image</string>
+    <string name="content_desc_delete_button">Delete history item</string>
 </resources>

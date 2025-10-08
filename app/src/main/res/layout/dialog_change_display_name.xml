@@ -8,9 +8,10 @@
     android:padding="24dp">
 
     <TextView
+        android:id="@+id/tv_change_display_name_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Change Display Name"
+        android:text="@string/change_display_name_title"
         android:textColor="@color/text_color_dark"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -27,25 +28,27 @@
         app:endIconTint="@color/plant_green"
         app:endIconMode="clear_text"
         app:boxStrokeColor="@color/plant_green"
-        app:hintTextColor="@color/plant_green">
+        app:hintTextColor="@color/plant_green"
+        android:contentDescription="@string/input_display_name_des">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_new_display_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="New Display Name"
+            android:hint="@string/new_display_name_hint"
             android:inputType="textPersonName"
             android:maxLines="1"
-            android:paddingStart="50dp"/>
+            android:paddingStart="50dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btn_submit_change_display_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit"
+        android:text="@string/submit_button"
         android:backgroundTint="@color/plant_green"
         android:textColor="@color/white"
-        android:paddingVertical="12dp"/>
+        android:paddingVertical="12dp"
+        android:contentDescription="@string/submit_button_des" />
 
 </LinearLayout>

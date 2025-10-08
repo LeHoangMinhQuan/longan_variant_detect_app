@@ -35,19 +35,17 @@
                     android:id="@+id/plant_name_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ido"
+                    android:textColor="@color/text_color_dark"
                     android:textSize="28sp"
                     android:textStyle="bold"
-                    android:textColor="@color/text_color_dark"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="12dp"/>
+                    android:layout_marginBottom="12dp" />
 
                 <TextView
                     android:id="@+id/dateTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="18/05/2025"
                     android:textColor="@color/text_color_dark"
                     android:textSize="14sp"
                     android:textStyle="italic"
@@ -55,7 +53,7 @@
                     android:visibility="gone"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:background="@drawable/rounded_background"/>
+                    android:background="@drawable/rounded_background" />
 
                 <!-- Plant Image -->
                 <ImageView
@@ -64,8 +62,8 @@
                     android:layout_height="200dp"
                     android:layout_gravity="center_horizontal"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ido"
-                    android:layout_marginBottom="12dp"/>
+                    android:layout_marginBottom="12dp"
+                    android:contentDescription="@string/plant_image_des" />
 
                 <!-- Information Section -->
                 <LinearLayout
@@ -84,16 +82,30 @@
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_color_dark"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_marginBottom="8dp" />
 
-                    <LinearLayout style="@style/BulletPointLayout">
-                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_1" app:srcCompat="@drawable/ic_leaf_small"/>
-                        <TextView style="@style/BulletPointText" android:id="@+id/plant_origin" android:text="Origin: Thái Lan"/>
+                    <LinearLayout style="@style/BulletPointLayout"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/BulletPointIcon"
+                            android:id="@+id/img_1"
+                            app:srcCompat="@drawable/ic_leaf_small"
+                            android:contentDescription="@string/icon_leaf_des" />
+                        <TextView
+                            style="@style/BulletPointText"
+                            android:id="@+id/plant_origin" />
                     </LinearLayout>
 
-                    <LinearLayout style="@style/BulletPointLayout">
-                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_2" app:srcCompat="@drawable/ic_leaf_small"/>
-                        <TextView style="@style/BulletPointText" android:id="@+id/plant_productivity" android:text="Productivity: 70-100 tấn"/>
+                    <LinearLayout style="@style/BulletPointLayout"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/BulletPointIcon"
+                            android:id="@+id/img_2"
+                            app:srcCompat="@drawable/ic_leaf_small"
+                            android:contentDescription="@string/icon_leaf_des" />
+                        <TextView
+                            style="@style/BulletPointText"
+                            android:id="@+id/plant_productivity" />
                     </LinearLayout>
 
                     <!-- Description -->
@@ -106,12 +118,18 @@
                         android:textStyle="bold"
                         android:textColor="@color/text_color_dark"
                         android:layout_marginTop="12dp"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_marginBottom="8dp" />
 
-                    <LinearLayout style="@style/BulletPointLayout">
-                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_3" app:srcCompat="@drawable/ic_leaf_small"/>
-                        <TextView style="@style/BulletPointText" android:id="@+id/plant_description"
-                            android:text="Phát triển nhanh, ít sâu bệnh, năng suất cao và tỷ lệ nhiễm bệnh chổi rồng rất thấp. Hạt nhỏ, cơm dầy và giòn, ít nước, độ ngọt vừa phải, được chọn xuất sang thị trường châu Âu và châu Mỹ."/>
+                    <LinearLayout style="@style/BulletPointLayout"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/BulletPointIcon"
+                            android:id="@+id/img_3"
+                            app:srcCompat="@drawable/ic_leaf_small"
+                            android:contentDescription="@string/icon_leaf_des" />
+                        <TextView
+                            style="@style/BulletPointText"
+                            android:id="@+id/plant_description" />
                     </LinearLayout>
 
                     <!-- Tips -->
@@ -124,12 +142,18 @@
                         android:textStyle="bold"
                         android:textColor="@color/text_color_dark"
                         android:layout_marginTop="12dp"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_marginBottom="8dp" />
 
-                    <LinearLayout style="@style/BulletPointLayout">
-                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_4" app:srcCompat="@drawable/ic_leaf_small"/>
-                        <TextView style="@style/BulletPointText" android:id="@+id/plant_tips"
-                            android:text="Nhãn Thái Lan thường xuất bán vào thời điểm tháng 7 và rằm tháng 10 âm lịch, bạn nên né tránh thu hoạch nhãn vào các thời điểm này để tránh gặp cảnh “hàng nhiều dội chợ”. 1 điều quan trọng sau khi thu hoạch là cần tiến hành cắt tỉa cành già, cành khô héo, bón thêm phân để cây đâm tược chờ mùa sau."/>
+                    <LinearLayout style="@style/BulletPointLayout"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/BulletPointIcon"
+                            android:id="@+id/img_4"
+                            app:srcCompat="@drawable/ic_leaf_small"
+                            android:contentDescription="@string/icon_leaf_des" />
+                        <TextView
+                            style="@style/BulletPointText"
+                            android:id="@+id/plant_tips" />
                     </LinearLayout>
 
                     <!-- Growing Methods -->
@@ -142,54 +166,111 @@
                         android:textStyle="bold"
                         android:textColor="@color/text_color_dark"
                         android:layout_marginTop="12dp"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_marginBottom="8dp" />
 
-                    <LinearLayout style="@style/BulletPointLayout">
-                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_5" app:srcCompat="@drawable/ic_leaf_small"/>
-                        <TextView style="@style/BulletPointText" android:id="@+id/branch_pruning" android:text="- Branch pruning: N/A"/>
+                    <LinearLayout style="@style/BulletPointLayout"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/BulletPointIcon"
+                            android:id="@+id/img_5"
+                            app:srcCompat="@drawable/ic_leaf_small"
+                            android:contentDescription="@string/icon_leaf_des" />
+                        <TextView
+                            style="@style/BulletPointText"
+                            android:id="@+id/branch_pruning" />
                     </LinearLayout>
 
-                    <LinearLayout style="@style/BulletPointLayout">
-                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_6" app:srcCompat="@drawable/ic_leaf_small"/>
-                        <TextView style="@style/BulletPointText" android:id="@+id/fertilizer" android:text="- Fertilizer: N/A"/>
+                    <LinearLayout style="@style/BulletPointLayout"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/BulletPointIcon"
+                            android:id="@+id/img_6"
+                            app:srcCompat="@drawable/ic_leaf_small"
+                            android:contentDescription="@string/icon_leaf_des" />
+                        <TextView
+                            style="@style/BulletPointText"
+                            android:id="@+id/fertilizer" />
                     </LinearLayout>
 
-                    <LinearLayout style="@style/BulletPointLayout">
-                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_7" app:srcCompat="@drawable/ic_leaf_small"/>
-                        <TextView style="@style/BulletPointText" android:id="@+id/fruit_pruning" android:text="- Fruit pruning: N/A"/>
+                    <LinearLayout style="@style/BulletPointLayout"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/BulletPointIcon"
+                            android:id="@+id/img_7"
+                            app:srcCompat="@drawable/ic_leaf_small"
+                            android:contentDescription="@string/icon_leaf_des" />
+                        <TextView
+                            style="@style/BulletPointText"
+                            android:id="@+id/fruit_pruning" />
                     </LinearLayout>
 
-                    <LinearLayout style="@style/BulletPointLayout">
-                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_8"  app:srcCompat="@drawable/ic_leaf_small"/>
-                        <TextView style="@style/BulletPointText" android:id="@+id/pesticide" android:text="- Pesticide: N/A"/>
+                    <LinearLayout style="@style/BulletPointLayout"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/BulletPointIcon"
+                            android:id="@+id/img_8"
+                            app:srcCompat="@drawable/ic_leaf_small"
+                            android:contentDescription="@string/icon_leaf_des" />
+                        <TextView
+                            style="@style/BulletPointText"
+                            android:id="@+id/pesticide" />
                     </LinearLayout>
 
-                    <LinearLayout style="@style/BulletPointLayout">
-                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_9" app:srcCompat="@drawable/ic_leaf_small"/>
-                        <TextView style="@style/BulletPointText" android:id="@+id/plant_distance" android:text="- Plant distance: N/A"/>
+                    <LinearLayout style="@style/BulletPointLayout"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/BulletPointIcon"
+                            android:id="@+id/img_9"
+                            app:srcCompat="@drawable/ic_leaf_small"
+                            android:contentDescription="@string/icon_leaf_des" />
+                        <TextView
+                            style="@style/BulletPointText"
+                            android:id="@+id/plant_distance" />
                     </LinearLayout>
 
-                    <LinearLayout style="@style/BulletPointLayout">
-                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_10" app:srcCompat="@drawable/ic_leaf_small"/>
-                        <TextView style="@style/BulletPointText" android:id="@+id/plant_time" android:text="- Plant time: N/A"/>
+                    <LinearLayout style="@style/BulletPointLayout"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/BulletPointIcon"
+                            android:id="@+id/img_10"
+                            app:srcCompat="@drawable/ic_leaf_small"
+                            android:contentDescription="@string/icon_leaf_des" />
+                        <TextView
+                            style="@style/BulletPointText"
+                            android:id="@+id/plant_time" />
                     </LinearLayout>
 
-                    <LinearLayout style="@style/BulletPointLayout">
-                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_11" app:srcCompat="@drawable/ic_leaf_small"/>
-                        <TextView style="@style/BulletPointText" android:id="@+id/soil" android:text="- Soil: N/A"/>
+                    <LinearLayout style="@style/BulletPointLayout"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/BulletPointIcon"
+                            android:id="@+id/img_11"
+                            app:srcCompat="@drawable/ic_leaf_small"
+                            android:contentDescription="@string/icon_leaf_des" />
+                        <TextView
+                            style="@style/BulletPointText"
+                            android:id="@+id/soil" />
                     </LinearLayout>
 
-                    <LinearLayout style="@style/BulletPointLayout">
-                        <ImageView style="@style/BulletPointIcon" android:id="@+id/img_12" app:srcCompat="@drawable/ic_leaf_small"/>
-                        <TextView style="@style/BulletPointText" android:id="@+id/other" android:text="- Other: N/A"/>
+                    <LinearLayout style="@style/BulletPointLayout"
+                        tools:ignore="UseCompoundDrawables">
+                        <ImageView
+                            style="@style/BulletPointIcon"
+                            android:id="@+id/img_12"
+                            app:srcCompat="@drawable/ic_leaf_small"
+                            android:contentDescription="@string/icon_leaf_des" />
+                        <TextView
+                            style="@style/BulletPointText"
+                            android:id="@+id/other" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/init_section"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                android:orientation="vertical" />
         </androidx.cardview.widget.CardView>
     </ScrollView>
 

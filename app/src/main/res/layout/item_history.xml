@@ -27,13 +27,14 @@
             android:src="@android:drawable/ic_menu_delete"
             android:layout_marginEnd="8dp"
             android:layout_centerVertical="true"
-            android:contentDescription="Delete icon"
+            android:contentDescription="@string/content_desc_delete_icon"
             app:tint="@android:color/white" />
 
         <TextView
+            android:id="@+id/delete_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="XÓA"
+            android:text="@string/delete_label"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -62,7 +63,7 @@
                 android:layout_width="72dp"
                 android:layout_height="72dp"
                 android:scaleType="centerCrop"
-                android:contentDescription="Plant image"
+                android:contentDescription="@string/content_desc_history_image"
                 tools:srcCompat="@tools:sample/avatars"
                 android:layout_marginEnd="16dp"/>
 
@@ -97,7 +98,7 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Delete History"
+                android:contentDescription="@string/content_desc_delete_button"
                 android:src="@android:drawable/ic_menu_delete"
                 app:tint="@android:color/holo_red_dark"/>
 
