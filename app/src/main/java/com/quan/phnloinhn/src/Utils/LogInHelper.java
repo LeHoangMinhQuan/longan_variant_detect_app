@@ -1,8 +1,5 @@
 package com.quan.phnloinhn.src.Utils;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import com.firebase.ui.auth.ErrorCodes;
 
 import java.util.HashMap;
@@ -35,7 +32,7 @@ public class LogInHelper {
         PASSWORD_MSGS.put("ERROR_INVALID_CREDENTIAL", "Sai email hoặc mật khẩu");
     }
 
-    public static int validateCredentials(Context context, String email, String password) {
+    public static int validateCredentials(String email, String password) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z.-]+$";
         // At least 8 characters, 1 uppercase, 1 digit, 1 special character
         String passwordRegex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/]).{8,}$";
@@ -53,7 +50,7 @@ public class LogInHelper {
         return VALID_CREDENTIALS;
     }
 
-    public static int validateEmail(Context context, String email) {
+    public static int validateEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z.-]+$";
         // Validate credentials : 0 - True, 1 - Email invalid
         if (!email.matches(emailRegex)) {

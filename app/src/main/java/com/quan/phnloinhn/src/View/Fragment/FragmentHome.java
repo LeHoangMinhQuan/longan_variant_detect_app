@@ -42,15 +42,18 @@ import android.widget.Toast;
 import com.quan.phnloinhn.R;
 import com.quan.phnloinhn.databinding.FragmentHomeBinding;
 import com.quan.phnloinhn.databinding.ItemBulletBinding;
-import com.quan.phnloinhn.databinding.ItemImageBinding;
 import com.quan.phnloinhn.databinding.ItemParagraphBinding;
 import com.quan.phnloinhn.src.Model.GrowingMethod;
+import com.quan.phnloinhn.src.Model.History;
 import com.quan.phnloinhn.src.Model.LonganVariant;
 import com.quan.phnloinhn.src.ViewModel.SharedViewModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class FragmentHome extends Fragment {
@@ -63,6 +66,8 @@ public class FragmentHome extends Fragment {
     private final String TAG = "FragmentHome";
     private ActivityResultLauncher<Uri> takePhotoLauncher;
     private Uri tempPhotoUri;
+    private boolean isViewingHistory = false;
+    private History currentHistoryRecord = null;
 
 
     private static final Map<String, Integer> VARIANT_IMAGES = new HashMap<>();
@@ -94,8 +99,20 @@ public class FragmentHome extends Fragment {
         callback = new OnBackPressedCallback(false) {
             @Override
             public void handleOnBackPressed() {
-                // Clear dynamic content and show initial instructions again
-                displayInitialInformation();
+                if (isViewingHistory) {
+                    // Clear history viewing mode in ViewModel
+                    viewModel.clearHistoryView();
+
+                    // Reset local state
+                    isViewingHistory = false;
+                    currentHistoryRecord = null;
+
+                    // Show initial information
+                    displayInitialInformation();
+                } else {
+                    // Normal back press behavior
+                    displayInitialInformation();
+                }
             }
         };
 
@@ -150,7 +167,7 @@ public class FragmentHome extends Fragment {
         );
 
 
-        // 🔹 Take photo launcher (Camera)
+        // Take photo launcher (Camera)
         takePhotoLauncher = registerForActivityResult(
                 new ActivityResultContracts.TakePicture(),
                 success -> {
@@ -182,10 +199,39 @@ public class FragmentHome extends Fragment {
             takePhotoLauncher.launch(tempPhotoUri);
         });
 
+//      Observe history viewing mode**
+        viewModel.getIsViewingHistory().observe(getViewLifecycleOwner(), isViewing -> {
+            isViewingHistory = Boolean.TRUE.equals(isViewing);
 
+            if (isViewingHistory) {
+                callback.setEnabled(true); // Enable back press when viewing history
+            }
+        });
+
+        // **NEW: Observe current history record**
+        viewModel.getCurrentHistory().observe(getViewLifecycleOwner(), history -> {
+            currentHistoryRecord = history;
+
+            if (history != null && isViewingHistory) {
+                // Show timestamp when viewing history
+                binding.dateTime.setVisibility(View.VISIBLE);
+                binding.dateTime.setText(formatHistoryTimestamp(history.getTimestamp()));
+            } else {
+                binding.dateTime.setVisibility(View.GONE);
+            }
+        });
+
+        // **UPDATED: Selected variant observer**
         viewModel.getSelectedVariant().observe(getViewLifecycleOwner(), variant -> {
-            if (variant == null) displayInitialInformation();
-            else displayVariant(variant);
+            if (variant == null) {
+                displayInitialInformation();
+            } else {
+                if (isViewingHistory && currentHistoryRecord != null) {
+                    displayVariantWithHistory(variant, currentHistoryRecord);
+                } else {
+                    displayVariant(variant);
+                }
+            }
         });
     }
 
@@ -199,7 +245,7 @@ public class FragmentHome extends Fragment {
         );
     }
 
-    /** Check permission (API 24–35 safe) */
+//    Check permission (API 24–35 safe)
     private void checkGalleryPermissionAndOpen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             // Android 13+
@@ -220,11 +266,22 @@ public class FragmentHome extends Fragment {
         }
     }
 
-    /** 🔸 Open gallery */
+//    Open gallery
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         pickImageLauncher.launch(Intent.createChooser(intent, "Chọn ảnh"));
+    }
+
+    private String formatHistoryTimestamp(String timestamp) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault());
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+            Date date = inputFormat.parse(timestamp);
+            return "Xem lúc: " + outputFormat.format(date);
+        } catch (Exception e) {
+            return timestamp;
+        }
     }
 
     @Override
@@ -233,12 +290,53 @@ public class FragmentHome extends Fragment {
         binding = null;
     }
 
+    private void resetAllViews() {
+        // Hide everything
+        binding.fabAdd.setVisibility(View.GONE);
+        binding.fabCamera.setVisibility(View.GONE);
+        binding.dateTime.setVisibility(View.GONE);
+
+        setVisible(binding.plantNameTitle, null, false);
+        setVisible(null, binding.plantImage, false);
+
+        setVisible(binding.general, null, false);
+        setVisible(binding.description, null, false);
+        setVisible(binding.tips, null, false);
+        setVisible(binding.growingMethods, null, false);
+
+        setVisible(binding.plantOrigin, binding.img1, false);
+        setVisible(binding.plantProductivity, binding.img2, false);
+        setVisible(binding.plantDescription, binding.img3, false);
+        setVisible(binding.plantTips, binding.img4, false);
+        setVisible(binding.branchPruning, binding.img5, false);
+        setVisible(binding.fertilizer, binding.img6, false);
+        setVisible(binding.fruitPruning, binding.img7, false);
+        setVisible(binding.pesticide, binding.img8, false);
+        setVisible(binding.plantDistance, binding.img9, false);
+        setVisible(binding.plantTime, binding.img10, false);
+        setVisible(binding.soil, binding.img11, false);
+        setVisible(binding.other, binding.img12, false);
+
+        // Clear and hide init section
+        binding.initSection.removeAllViews();
+        binding.initSection.setVisibility(GONE);
+    }
     private void displayInitialInformation() {
+        // Clear history viewing mode when showing initial info
+        isViewingHistory = false;
+        currentHistoryRecord = null;
+
+        // Clear all views in initsection
+        resetAllViews();
+
         callback.setEnabled(false);
 
         // Show FABs
         binding.fabAdd.setVisibility(View.VISIBLE);
         binding.fabCamera.setVisibility(View.VISIBLE);
+
+        // Hide timestamp
+        binding.dateTime.setVisibility(View.GONE);
 
         // Hide all plant info
         setVisible(binding.plantNameTitle, null, false);
@@ -263,11 +361,12 @@ public class FragmentHome extends Fragment {
         setVisible(binding.other, binding.img12, false);
 
         // Show notes dynamically
-        addParagraph(getString(R.string.note_title), "");
+        binding.initSection.setVisibility(VISIBLE);
+        addParagraph(getString(R.string.note_title));
         addNoTitleBullet(R.string.note_1, 0);
         addNoTitleBullet(R.string.note_2, 0);
         addNoTitleBullet(R.string.note_3, 0);
-        addParagraph(getString(R.string.guide_title), "");
+        addParagraph(getString(R.string.guide_title));
         addNoTitleBullet(R.string.guide_1, R.drawable.ic_camera_green_24dp);
         addNoTitleBullet(R.string.guide_2, R.drawable.ic_add_green_24dp);
     }
@@ -278,8 +377,15 @@ public class FragmentHome extends Fragment {
         binding.fabAdd.setVisibility(View.GONE);
         binding.fabCamera.setVisibility(View.GONE);
 
+        // Clear all views in initsection
+        resetAllViews();
+
         // Hide init info
         binding.initSection.setVisibility(GONE);
+        // If not viewing history, hide timestamp
+        if (!isViewingHistory) {
+            binding.dateTime.setVisibility(View.GONE);
+        }
 
         // Show basic plant info
         setVisible(binding.plantNameTitle, null, true);
@@ -328,21 +434,36 @@ public class FragmentHome extends Fragment {
         }
     }
 
-    // Helper method to get drawable by plant name
-    private int getImageResourceByName(String variantName) {
-        String resName = VARIANT_ID.get(variantName); // get mapped resource name
-        if (resName == null) {
-            Log.d("Image", "No mapping found for variant: " + variantName);
-            return R.drawable.ic_clear; // fallback image
+    private void displayVariantWithHistory(LonganVariant variant, History history) {
+        displayVariant(variant);
+
+        // Override image with history image
+        if (history.getImageUrl() != null && !history.getImageUrl().isEmpty()) {
+            com.bumptech.glide.Glide.with(this)
+                    .load(history.getImageUrl())
+                    .placeholder(getImageResourceByName(variant.getName()))
+                    .error(getImageResourceByName(variant.getName()))
+                    .into(binding.plantImage);
         }
 
-        // Resource name in drawable
-        int resId = getResources().getIdentifier(resName, "drawable", requireContext().getPackageName());
-
-        Log.d("Image", "Variant: " + variantName + ", ResName: " + resName + ", ResId: " + resId);
-
-        return resId != 0 ? resId : R.drawable.ic_clear;
+        // Show timestamp
+        binding.dateTime.setVisibility(View.VISIBLE);
+        binding.dateTime.setText(formatHistoryTimestamp(history.getTimestamp()));
     }
+
+    // Helper method to get drawable by plant name
+    private int getImageResourceByName(String variantName) {
+        String resName = VARIANT_ID.get(variantName);
+        if (resName == null) {
+            Log.d("Image", "No mapping found for variant: " + variantName);
+            return R.drawable.ic_clear;
+        }
+
+        int resId = VARIANT_IMAGES.getOrDefault(resName, R.drawable.ic_clear);
+        Log.d("Image", "Variant: " + variantName + ", ResName: " + resName + ", ResId: " + resId);
+        return resId;
+    }
+
 
 
     private void setVisible(TextView textView, ImageView imageView, boolean visible) {
@@ -350,19 +471,12 @@ public class FragmentHome extends Fragment {
         if (textView != null) textView.setVisibility(visibility);
         if (imageView != null) imageView.setVisibility(visibility);
     }
-    private void addParagraph(String title, String value) {
-        if (value == null) return;
+    private void addParagraph(String title) {
         ItemParagraphBinding itemBinding = ItemParagraphBinding.inflate(getLayoutInflater(), binding.initSection, false);
         itemBinding.tvParagraphTitle.setText(title);
-        if(value.trim().isEmpty()){
-            itemBinding.tvParagraphText.setVisibility(GONE);
-        } else {
-            itemBinding.tvParagraphText.setText(value);
-        }
         binding.initSection.addView(itemBinding.getRoot());
     }
-    /*
-    * @DrawableRes int drawableResId: R.drawable.{icon} / 0*/
+
     private void addNoTitleBullet(@StringRes int textResId, @DrawableRes int drawableResId) {
         String textTemplate = getString(textResId);
 
@@ -381,7 +495,7 @@ public class FragmentHome extends Fragment {
                         .getDimension(R.dimen.inline_icon_size);
                 drawable.setBounds(0, 0, lineHeight, lineHeight);
 
-                ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
+                ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
 
                 int start = spannable.toString().indexOf(" ");
                 if (start >= 0) {

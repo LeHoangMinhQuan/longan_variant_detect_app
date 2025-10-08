@@ -18,7 +18,7 @@ import com.quan.phnloinhn.src.Utils.LogInHelper;
 public class LoginViewModel extends AndroidViewModel {
 
     private final FirebaseAuth mAuth;
-    private String TAG = "LoginViewModel";
+    private final String TAG = "LoginViewModel";
 
     // LiveData for UI state
     private final MutableLiveData<FirebaseUser> currentUser = new MutableLiveData<>();
@@ -47,22 +47,22 @@ public class LoginViewModel extends AndroidViewModel {
 
     // Validate credentials
     public boolean validateCredentials(String email, String password) {
-        int validationResult = LogInHelper.validateCredentials(getApplication(), email, password);
+        int validationResult = LogInHelper.validateCredentials(email, password);
 
         if (validationResult == LogInHelper.INVALID_EMAIL) {
             validationError.setValue(ValidationError.INVALID_EMAIL);
             errorMessage.setValue("Email không hợp lệ");
-            return false;
+            return true;
         }
 
         if (validationResult == LogInHelper.INVALID_PASSWORD) {
             validationError.setValue(ValidationError.INVALID_PASSWORD);
             errorMessage.setValue("Mật khẩu cần ít nhất 8 ký tự, 1 chữ in hoa, 1 số và 1 ký tự đặc biệt");
-            return false;
+            return true;
         }
 
         validationError.setValue(ValidationError.NONE);
-        return true;
+        return false;
     }
 
     // Validate email only
@@ -73,7 +73,7 @@ public class LoginViewModel extends AndroidViewModel {
             return false;
         }
 
-        int validationResult = LogInHelper.validateEmail(getApplication(), email);
+        int validationResult = LogInHelper.validateEmail(email);
 
         if (validationResult == LogInHelper.INVALID_EMAIL) {
             validationError.setValue(ValidationError.INVALID_EMAIL);
@@ -215,7 +215,6 @@ public class LoginViewModel extends AndroidViewModel {
 
     // Enums for state management
     public enum LoginState {
-        IDLE,
         LOGIN_SUCCESS,
         LOGIN_FAILED,
         REGISTER_SUCCESS,

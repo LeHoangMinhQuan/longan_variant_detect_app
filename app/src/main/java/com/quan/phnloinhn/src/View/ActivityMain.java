@@ -1,7 +1,6 @@
 package com.quan.phnloinhn.src.View;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.util.Log;
@@ -12,13 +11,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.credentials.ClearCredentialStateRequest;
 import androidx.credentials.CredentialManager;
+import androidx.credentials.CredentialManagerCallback;
+import androidx.credentials.exceptions.ClearCredentialException;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.quan.phnloinhn.R;
 import com.quan.phnloinhn.databinding.ActivityMainBinding;
@@ -27,15 +30,15 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.concurrent.Executors;
 
+
 public class ActivityMain extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+    private CredentialManager credentialManager;
 
     private ActivityMainBinding binding;
     private final String TAG = "ActivityMain";
 
     private SharedViewModel viewModel;
-    private FirebaseAuth mAuth;
-    private CredentialManager credentialManager;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +48,8 @@ public class ActivityMain extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
+        // Initialize CredentialManager
+        credentialManager = CredentialManager.create(this);
 
         viewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         // Show all message at Activity Scope
@@ -77,6 +82,10 @@ public class ActivityMain extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
+
+        viewModel.logoutEvent.observe(this, logout -> {
+            if (Boolean.TRUE.equals(logout)) logOut();
+        });
     }
 
     // menu trên toolbar
@@ -91,34 +100,38 @@ public class ActivityMain extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_logout) {
-            logOut();
+            showLogoutConfirmationDialog();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
-    // logout firebase
-    protected void logOut() {
+    private void showLogoutConfirmationDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.logout_title))
+                .setMessage(getString(R.string.logout_message))
+                .setPositiveButton(getString(R.string.logout_title), (dialog, which) -> logOut())
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show();
+    }
+
+    private void logOut() {
+
         // Sign out from Firebase (handles both email/password and Google sign-in)
         mAuth.signOut();
 
-        // lear Credential Manager state (prevents Google auto-sign-in)
-        androidx.credentials.ClearCredentialStateRequest clearRequest =
-                new androidx.credentials.ClearCredentialStateRequest();
+        // Clear Credential Manager state (prevents Google auto-sign-in)
+        ClearCredentialStateRequest clearRequest = new ClearCredentialStateRequest();
 
         credentialManager.clearCredentialStateAsync(
                 clearRequest,
                 new CancellationSignal(),
                 Executors.newSingleThreadExecutor(),
-                new androidx.credentials.CredentialManagerCallback<Void, androidx.credentials.exceptions.ClearCredentialException>() {
+                new CredentialManagerCallback<Void, ClearCredentialException>() {
                     @Override
                     public void onResult(Void result) {
                         runOnUiThread(() -> {
-                            // Clear SharedPreferences
-                            SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-                            prefs.edit().clear().apply();
-
                             // Show success message
                             Toast.makeText(getApplicationContext(),
                                     "Đăng xuất thành công",
@@ -140,9 +153,6 @@ public class ActivityMain extends AppCompatActivity {
                             Log.e(TAG, "Couldn't clear credentials: " + e.getLocalizedMessage());
 
                             // Still complete logout even if credential clear fails
-                            SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-                            prefs.edit().clear().apply();
-
                             Toast.makeText(getApplicationContext(),
                                     "Đăng xuất thành công",
                                     Toast.LENGTH_SHORT).show();
@@ -157,5 +167,10 @@ public class ActivityMain extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    public void navigateToHome() {
+        // Just update bottom nav - NavigationUI handles the rest
+        binding.navView.setSelectedItemId(R.id.nav_fragmentHome);
     }
 }

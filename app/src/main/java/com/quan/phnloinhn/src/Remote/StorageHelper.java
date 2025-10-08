@@ -1,8 +1,6 @@
 package com.quan.phnloinhn.src.Remote;
 
-import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.*;
@@ -10,7 +8,6 @@ import com.google.firebase.storage.*;
 public class StorageHelper {
 
     private final FirebaseStorage storage;
-    private static final String TAG = "StorageHelper";
 
     public StorageHelper() {
         storage = FirebaseStorage.getInstance();
@@ -22,7 +19,7 @@ public class StorageHelper {
                 .child("users/" + uid + "/history/" + fileName);
     }
 
-    public void uploadImage(Context context, StorageReference ref, Uri fileUri, ResultCallback<String> callback) {
+    public void uploadImage(StorageReference ref, Uri fileUri, ResultCallback<String> callback) {
         ref.putFile(fileUri)
                 .addOnSuccessListener(task -> ref.getDownloadUrl()
                         .addOnSuccessListener(uri -> callback.onSuccess(uri.toString()))
@@ -36,15 +33,13 @@ public class StorageHelper {
             StorageReference photoRef = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
 
             // Delete file
+            // Deletion failed
             photoRef.delete()
                     .addOnSuccessListener(aVoid -> {
                         // Successfully deleted
                         callback.onSuccess(true);
                     })
-                    .addOnFailureListener(e -> {
-                        // Deletion failed
-                        callback.onFailure(e);
-                    });
+                    .addOnFailureListener(callback::onFailure);
         } catch (Exception e) {
             callback.onFailure(e);
         }

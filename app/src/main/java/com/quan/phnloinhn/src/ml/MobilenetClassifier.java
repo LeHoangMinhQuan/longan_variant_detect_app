@@ -23,16 +23,15 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Collections;
 import java.util.Objects;
 
 public class MobilenetClassifier {
 
-    private AssetManager assetManager;
-    private String modelPath;
-    private String labelPath;
+    private final AssetManager assetManager;
+    private final String modelPath;
+    private final String labelPath;
     private List<String> labelList;
-    private int inputSize = 224;
+    private final int inputSize; // 224
     private Interpreter interpreter;
 
     public MobilenetClassifier(AssetManager assetManager, String modelPath, String labelPath, int inputSize) {
@@ -42,9 +41,9 @@ public class MobilenetClassifier {
         this.inputSize = inputSize;
     }
     public static class Recognition {
-        private String id = "";
-        private String title = "";
-        private float confidence = 0f;
+        private final String id;
+        private final String title;
+        private final float confidence;
 
         public Recognition(String id, String title, float confidence) {
             this.id = id;
@@ -100,7 +99,8 @@ public class MobilenetClassifier {
             long declaredLength = fileDescriptor.getDeclaredLength();
             return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
         } catch (IOException e) {
-            e.printStackTrace();
+            String TAG = "MobilenetClassifier";
+            Log.e(TAG, "Error: " + e);
         }
         return null;
     }
@@ -178,7 +178,7 @@ public class MobilenetClassifier {
         }
 
         // Sort descending by confidence
-        Collections.sort(recognitions, (r1, r2) -> Float.compare(r2.getConfidence(), r1.getConfidence()));
+        recognitions.sort((r1, r2) -> Float.compare(r2.getConfidence(), r1.getConfidence()));
         return recognitions;
     }
 

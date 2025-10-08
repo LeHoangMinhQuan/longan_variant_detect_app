@@ -36,10 +36,14 @@ public class SharedViewModel extends AndroidViewModel {
     private final MutableLiveData<List<History>> historyList = new MutableLiveData<>();
     private final MutableLiveData<String> message = new MutableLiveData<>();
 
+    // New: Track current history being viewed
+    private final MutableLiveData<History> currentHistory = new MutableLiveData<>(null);
+    private final MutableLiveData<Boolean> isViewingHistory = new MutableLiveData<>(false);
+    public final MutableLiveData<Boolean> logoutEvent = new MutableLiveData<>();
     private final ClassifierRepository classifierRepo;
     private final FirestoreHelper db;
     private final StorageHelper storage;
-    private String TAG = "SharedViewModel";
+    private final String TAG = "SharedViewModel";
 
     public SharedViewModel(@NonNull Application app) {
         super(app);
@@ -48,6 +52,7 @@ public class SharedViewModel extends AndroidViewModel {
         } catch (IOException e) {
             throw new RuntimeException("Failed to init classifier", e);
         }
+
         db = new FirestoreHelper(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
         storage = new StorageHelper();
 
@@ -57,13 +62,14 @@ public class SharedViewModel extends AndroidViewModel {
 
     // Expose LiveData
     public LiveData<LonganVariant> getSelectedVariant() { return selectedVariant; }
-    public LiveData<List<History>> getHistoryList() {
-        return historyList;
-    }
+    public LiveData<List<History>> getHistoryList() { return historyList; }
     public LiveData<String> getMessage() { return message; }
+    public LiveData<History> getCurrentHistory() { return currentHistory; }
+    public LiveData<Boolean> getIsViewingHistory() { return isViewingHistory; }
+
 
     private void fetchVariants() {
-        db.getAllVariants(new ResultCallback<Map<String, LonganVariant>>() {
+        db.getAllVariants(new ResultCallback<>() {
             @Override
             public void onSuccess(Map<String, LonganVariant> data) {
                 variants.postValue(data);
@@ -75,11 +81,11 @@ public class SharedViewModel extends AndroidViewModel {
             }
         });
     }
+
     private void fetchUserHistory() {
-        db.getAllHistory(new ResultCallback<List<History>>() {
+        db.getAllHistory(new ResultCallback<>() {
             @Override
             public void onSuccess(List<History> result) {
-                // Sort by timestamp descending
                 result.sort((h1, h2) ->
                         h2.getTimestamp().compareTo(h1.getTimestamp()));
                 historyList.postValue(result);
@@ -91,22 +97,23 @@ public class SharedViewModel extends AndroidViewModel {
             }
         });
     }
-    public void classifyImage(Bitmap bitmap, Uri imageUri) {
-//        new Thread(() -> {
-            List<MobilenetClassifier.Recognition> predictions = classifierRepo.classify(bitmap);
 
-            if (!predictions.isEmpty()) {
-                String variantName = predictions.get(0).getTitle();
-                Map<String, LonganVariant> data = variants.getValue();
-                if (data != null && data.containsKey(variantName)) {
-                    LonganVariant variant = data.get(variantName);
-                    selectedVariant.postValue(variant);
-                    uploadImage(imageUri, variantName);
-                }
-            } else {
-                message.postValue("Không dự đoán được");
+    public void classifyImage(Bitmap bitmap, Uri imageUri) {
+        List<MobilenetClassifier.Recognition> predictions = classifierRepo.classify(bitmap);
+
+        if (!predictions.isEmpty()) {
+            String variantName = predictions.get(0).getTitle();
+            Map<String, LonganVariant> data = variants.getValue();
+            if (data != null && data.containsKey(variantName)) {
+                LonganVariant variant = data.get(variantName);
+                selectedVariant.postValue(variant);
+                isViewingHistory.postValue(false);
+                currentHistory.postValue(null);
+                uploadImage(imageUri, variantName);
             }
-//        }).start();
+        } else {
+            message.postValue("Không dự đoán được");
+        }
     }
 
     private void uploadImage(Uri uri, String variantName) {
@@ -118,7 +125,7 @@ public class SharedViewModel extends AndroidViewModel {
         Log.d(TAG, "path: " + path);
         Log.d(TAG, "uri: " + uri);
 
-        storage.uploadImage(null, path, uri, new ResultCallback<String>() {
+        storage.uploadImage(path, uri, new ResultCallback<>() {
             @Override
             public void onSuccess(String url) {
                 saveHistory(new History(variantName, url, date));
@@ -131,36 +138,79 @@ public class SharedViewModel extends AndroidViewModel {
         });
     }
 
-private void saveHistory(History newHistory) {
-    db.addHistory(newHistory, new ResultCallback<Boolean>() {
-        @Override
-        public void onSuccess(Boolean result) {
-            List<History> current = historyList.getValue();
-            List<History> updated = (current != null) ? new ArrayList<>(current) : new ArrayList<>();
-            updated.add(newHistory);
-            updated.sort((h1, h2) -> h2.getTimestamp().compareTo(h1.getTimestamp()));
-            historyList.postValue(updated);  // new list instance
-            message.postValue("Đã lưu lịch sử");
+    private void saveHistory(History newHistory) {
+        db.addHistory(newHistory, new ResultCallback<>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                List<History> current = historyList.getValue();
+                List<History> updated = (current != null) ? new ArrayList<>(current) : new ArrayList<>();
+                updated.add(newHistory);
+                updated.sort((h1, h2) -> h2.getTimestamp().compareTo(h1.getTimestamp()));
+                historyList.postValue(updated);
+                message.postValue("Đã lưu lịch sử");
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                message.postValue("Lỗi khi lưu lịch sử");
+            }
+        });
+    }
+
+    /**
+     * View a history record - loads the variant and marks it as history view
+     * Forces UI refresh even if same variant
+     */
+    public void viewHistoryDetail(History history) {
+        if (history == null) {
+            Log.w(TAG, "Attempted to view null history");
+            return;
         }
 
-        @Override
-        public void onFailure(Exception e) {
-            message.postValue("Lỗi khi lưu lịch sử");
+        Map<String, LonganVariant> data = variants.getValue();
+        if (data == null) {
+            message.postValue("Chưa tải xong dữ liệu giống");
+            return;
         }
-    });
-}
+
+        String variantName = history.getVariantName();
+        if (!data.containsKey(variantName)) {
+            message.postValue("Không tìm thấy thông tin giống: " + variantName);
+            Log.w(TAG, "Variant not found: " + variantName);
+            return;
+        }
+
+        LonganVariant variant = data.get(variantName);
+
+        // Set history viewing mode FIRST
+        isViewingHistory.postValue(true);
+        currentHistory.postValue(history);
+
+        // Force update variant (triggers observer even if same object)
+        selectedVariant.postValue(null); // Clear first
+        selectedVariant.postValue(variant); // Then set
+
+        Log.d(TAG, "Viewing history: " + variantName + " at " + history.getTimestamp());
+    }
+
+    /**
+     * Clear history viewing mode and reset to initial state
+     */
+    public void clearHistoryView() {
+        isViewingHistory.postValue(false);
+        currentHistory.postValue(null);
+        selectedVariant.postValue(null);
+        Log.d(TAG, "Cleared history view");
+    }
 
     public void deleteHistory(History history) {
-        // Step 1: Delete image from Firebase Storage
-        storage.deleteImage(history.getImageUrl(), new ResultCallback<Boolean>() {
+        storage.deleteImage(history.getImageUrl(), new ResultCallback<>() {
             @Override
             public void onSuccess(Boolean result) {
                 Utils.hideLoading();
-                // Step 2: Delete record from Firestore
-                db.deleteHistory(history, new ResultCallback<Boolean>() {
+                db.deleteHistory(history, new ResultCallback<>() {
                     @Override
                     public void onSuccess(Boolean result) {
-                        // Step 3: Update UI after both deletions succeed
                         List<History> current = historyList.getValue();
                         if (current != null) {
                             List<History> updated = new ArrayList<>(current);
@@ -168,6 +218,14 @@ private void saveHistory(History newHistory) {
                                 historyList.postValue(updated);
                             }
                         }
+
+                        // If deleted history is currently being viewed, clear it
+                        History currentlyViewing = currentHistory.getValue();
+                        if (currentlyViewing != null &&
+                                currentlyViewing.getTimestamp().equals(history.getTimestamp())) {
+                            clearHistoryView();
+                        }
+
                         message.postValue("✅ Đã xóa lịch sử và ảnh thành công");
                     }
 
@@ -184,10 +242,9 @@ private void saveHistory(History newHistory) {
             }
         });
     }
+
     public void clearMessage() {
         message.postValue(null);
     }
 
 }
-
-

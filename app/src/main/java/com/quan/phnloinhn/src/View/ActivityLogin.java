@@ -44,7 +44,7 @@ import java.util.concurrent.Executors;
 public class ActivityLogin extends AppCompatActivity {
     private LoginViewModel viewModel;
     private ActivityLoginBinding binding;
-    private String TAG = "ActivityLogin";
+    private final String TAG = "ActivityLogin";
     private CredentialManager credentialManager;
     private Executor executor;
     private OnBackPressedCallback backPressedCallback;
@@ -137,26 +137,18 @@ public class ActivityLogin extends AppCompatActivity {
                 case NONE:
                     clearAllErrors();
                     break;
+
+                // Username-related errors
                 case EMPTY_EMAIL:
-                    if (errorMsg != null) {
-                        showError(binding.textInputLayoutUsername, errorMsg);
-                    }
-                    break;
                 case INVALID_EMAIL:
-                    if (errorMsg != null) {
-                        showError(binding.textInputLayoutUsername, errorMsg);
-                    }
-                    break;
-                case INVALID_PASSWORD:
-                    if (errorMsg != null) {
-                        showError(binding.textInputLayoutPassword, errorMsg);
-                    }
-                    break;
                 case FIREBASE_EMAIL_ERROR:
                     if (errorMsg != null) {
                         showError(binding.textInputLayoutUsername, errorMsg);
                     }
                     break;
+
+                // Password-related errors
+                case INVALID_PASSWORD:
                 case FIREBASE_PASSWORD_ERROR:
                     if (errorMsg != null) {
                         showError(binding.textInputLayoutPassword, errorMsg);
@@ -179,7 +171,7 @@ public class ActivityLogin extends AppCompatActivity {
         // Observe loading state
         viewModel.getIsLoading().observe(this, isLoading -> {
             if (isLoading != null && isLoading) {
-                Utils.showLoading(this, "Đang xử lý...");
+                Utils.showLoading(this, getString(R.string.processing));
             } else {
                 Utils.hideLoading();
             }
@@ -279,7 +271,7 @@ public class ActivityLogin extends AppCompatActivity {
         clearAllErrors();
 
         // Validate using ViewModel
-        if (!viewModel.validateCredentials(email, password)) {
+        if (viewModel.validateCredentials(email, password)) {
             return;
         }
 
@@ -382,7 +374,7 @@ public class ActivityLogin extends AppCompatActivity {
         clearAllErrors();
 
         // Validate using ViewModel
-        if (!viewModel.validateCredentials(email, password)) {
+        if (viewModel.validateCredentials(email, password)) {
             return;
         }
 
@@ -414,7 +406,7 @@ public class ActivityLogin extends AppCompatActivity {
                 request,
                 null,
                 executor,
-                new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+                new CredentialManagerCallback<>() {
                     @Override
                     public void onResult(GetCredentialResponse result) {
                         handleGoogleSignInResult(result);
@@ -440,7 +432,7 @@ public class ActivityLogin extends AppCompatActivity {
             if (TYPE_GOOGLE_ID_TOKEN_CREDENTIAL.equals(credential.getType())) {
                 try {
                     GoogleIdTokenCredential googleIdTokenCredential =
-                            GoogleIdTokenCredential.createFrom(((CustomCredential) credential).getData());
+                            GoogleIdTokenCredential.createFrom((credential).getData());
 
                     String idToken = googleIdTokenCredential.getIdToken();
 

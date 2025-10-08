@@ -12,16 +12,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class Utils {
     private static AlertDialog loadingDialog;
-    public static final String IDO = "ido";
-    public static final String TIEU = "tieu";
-    public static final String XUONG = "xuong";
-    public static final String THANH_NHAN = "thanh_nhan";
 
-    /**
-     * Show loading dialog
-     * @param context Activity or Fragment context
-     * @param message Optional message (nullable)
-     */
     public static void showLoading(Context context, String message) {
         if (context == null) return;
 

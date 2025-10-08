@@ -10,7 +10,6 @@
     <string name="fab_add_des">Tải ảnh lên</string>
     <string name="default_web_client_id">87450574837-90ikq56pp9372kfce2hm46o4lnhj87l1.apps.googleusercontent.com</string>
     <string name="android_client_id">87450574837-qu08nvli42poc8gv5kb906uacnn5edht.apps.googleusercontent.com</string>
-    <string name="logout_title">Đăng xuất</string>
     <string name="email_hint">Nhập email</string>
     <string name="password_hint">Nhập mật khẩu</string>
     <string name="login_title">Đăng nhập</string>
@@ -52,4 +51,39 @@
     <string name="tips_label">MẸO NHỎ</string>
     <string name="growing_label">PHƯƠNG PHÁP TRỒNG</string>
     <string name="general_label">THÔNG TIN CHUNG</string>
+    <string name="recent_classifications">Phân loại gần đây</string>
+    <string name="no_history_message">Lịch sử trống. Hãy phân loại để lưu lịch sử</string>
+    <!-- Profile / User messages -->
+    <string name="user_not_found">Không tìm thấy người dùng. Vui lòng đăng nhập lại.</string>
+    <string name="anonymous_user">Người dùng ẩn danh</string>
+    <string name="no_email_linked">Chưa liên kết email</string>
+
+    <!-- Change password -->
+    <string name="enter_current_password">Vui lòng nhập mật khẩu hiện tại</string>
+    <string name="enter_new_password">Vui lòng nhập mật khẩu mới</string>
+    <string name="password_min_length">Mật khẩu phải có ít nhất 6 ký tự</string>
+    <string name="password_not_match">Mật khẩu không khớp</string>
+    <string name="error_user_not_found">Lỗi: Không tìm thấy người dùng</string>
+    <string name="processing">Đang xử lý…</string>
+    <string name="password_changed_success">Đổi mật khẩu thành công</string>
+    <string name="password_change_failed">Không thể đổi mật khẩu: %1$s</string>
+    <string name="auth_failed">Xác thực thất bại. Kiểm tra lại mật khẩu hiện tại.</string>
+
+    <!-- Display name -->
+    <string name="display_name_empty">Tên hiển thị không được để trống</string>
+    <string name="display_name_updated">Cập nhật tên hiển thị thành công</string>
+    <string name="display_name_update_failed">Không thể cập nhật tên hiển thị: %1$s</string>
+
+    <!-- Link email -->
+    <string name="enter_email">Vui lòng nhập email</string>
+    <string name="enter_valid_email">Vui lòng nhập email hợp lệ</string>
+    <string name="enter_password">Vui lòng nhập mật khẩu</string>
+    <string name="email_linked_success">Liên kết email thành công!</string>
+    <string name="email_link_failed">Liên kết email thất bại: %1$s</string>
+
+    <!-- Logout -->
+    <string name="logout_title">Đăng xuất</string>
+    <string name="logout_message">Bạn có chắc muốn đăng xuất không?</string>
+    <string name="logout_success">Đã đăng xuất thành công</string>
+    <string name="cancel">Hủy</string>
 </resources>

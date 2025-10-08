@@ -11,7 +11,6 @@
     <string name="fab_add_des">Image Upload</string>
     <string name="default_web_client_id">87450574837-90ikq56pp9372kfce2hm46o4lnhj87l1.apps.googleusercontent.com</string>
     <string name="android_client_id">87450574837-qu08nvli42poc8gv5kb906uacnn5edht.apps.googleusercontent.com</string>
-    <string name="logout_title">Log out</string>
     <string name="email_hint">Enter email</string>
     <string name="password_hint">Enter password</string>
     <string name="login_title">Login</string>
@@ -53,4 +52,39 @@
     <string name="des_label">DESCRIPTION</string>
     <string name="tips_label">TIPS</string>
     <string name="growing_label">GROWING METHODS</string>
+    <string name="recent_classifications">Recent Classifications</string>
+    <string name="no_history_message">No history records yet. Start classifying!</string>
+    <!-- Profile / User messages -->
+    <string name="user_not_found">User not found. Please log in again.</string>
+    <string name="anonymous_user">Anonymous User</string>
+    <string name="no_email_linked">No email linked</string>
+
+    <!-- Change password -->
+    <string name="enter_current_password">Please enter current password</string>
+    <string name="enter_new_password">Please enter new password</string>
+    <string name="password_min_length">Password must be at least 6 characters</string>
+    <string name="password_not_match">Passwords do not match</string>
+    <string name="error_user_not_found">Error: User not found</string>
+    <string name="processing">Processing…</string>
+    <string name="password_changed_success">Password changed successfully</string>
+    <string name="password_change_failed">Failed to change password: %1$s</string>
+    <string name="auth_failed">Authentication failed. Check your current password.</string>
+
+    <!-- Display name -->
+    <string name="display_name_empty">Display name cannot be empty</string>
+    <string name="display_name_updated">Display name updated successfully</string>
+    <string name="display_name_update_failed">Failed to update display name: %1$s</string>
+
+    <!-- Link email -->
+    <string name="enter_email">Please enter email</string>
+    <string name="enter_valid_email">Please enter a valid email</string>
+    <string name="enter_password">Please enter password</string>
+    <string name="email_linked_success">Email linked successfully!</string>
+    <string name="email_link_failed">Failed to link email: %1$s</string>
+
+    <!-- Logout -->
+    <string name="logout_title">Log Out</string>
+    <string name="logout_message">Are you sure you want to log out?</string>
+    <string name="logout_success">Logged out successfully</string>
+    <string name="cancel">Cancel</string>
 </resources>
