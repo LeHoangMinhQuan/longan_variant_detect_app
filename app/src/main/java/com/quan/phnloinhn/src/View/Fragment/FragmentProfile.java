@@ -304,7 +304,7 @@ public class FragmentProfile extends Fragment {
         TextInputEditText passwordInput = dialogView.findViewById(R.id.et_link_password);
         Button btnSubmit = dialogView.findViewById(R.id.btn_submit_link_email);
 
-        AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext())
+        AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext(), R.style.Theme_PhanLoaiNhan)
                 .setView(dialogView)
                 .setCancelable(true)
                 .create();

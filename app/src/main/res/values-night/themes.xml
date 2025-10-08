@@ -17,7 +17,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- FAB icon tint fix -->
-        <item name="colorControlNormal">@null</item>
+        <item name="colorControlNormal">@color/transparent</item>
 
         <item name="colorError">@color/warning</item>
     </style>
