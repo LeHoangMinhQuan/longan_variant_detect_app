@@ -42,6 +42,38 @@ public class GrowingMethod {
     public String getPesticide() { return pesticide; }
     public String getSoil() { return soil; }
     public String getOther() { return other; }
+
+    public void setBranch_pruning(String branch_pruning) {
+        this.branch_pruning = branch_pruning;
+    }
+
+    public void setFertilizer(String fertilizer) {
+        this.fertilizer = fertilizer;
+    }
+
+    public void setFruit_pruning(String fruit_pruning) {
+        this.fruit_pruning = fruit_pruning;
+    }
+
+    public void setPesticide(String pesticide) {
+        this.pesticide = pesticide;
+    }
+
+    public void setPlant_distance(String plant_distance) {
+        this.plant_distance = plant_distance;
+    }
+
+    public void setPlant_time(String plant_time) {
+        this.plant_time = plant_time;
+    }
+
+    public void setSoil(String soil) {
+        this.soil = soil;
+    }
+
+    public void setOther(String other) {
+        this.other = other;
+    }
 }
 
 

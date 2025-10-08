@@ -21,3 +21,26 @@
 #-renamesourcefileattribute SourceFile
 -dontwarn org.tensorflow.lite.gpu.GpuDelegateFactory$Options$GpuBackend
 -dontwarn org.tensorflow.lite.gpu.GpuDelegateFactory$Options
+
+#############################################
+# 🔒 Firebase / Firestore / Realtime Database
+#############################################
+
+# Keep model classes (prevent stripping or renaming)
+-keep class com.quan.phnloinhn.src.Model.** { *; }
+
+# Keep all constructors and fields (for Firebase reflection)
+-keepclassmembers class com.quan.phnloinhn.src.Model.** {
+    public <init>();
+    <fields>;
+    <methods>;
+}
+
+# Keep Firebase core classes and annotations
+-keepattributes *Annotation*
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.internal.** { *; }
+
+# (Optional) Prevent warnings about Firebase reflection
+-dontwarn com.google.firebase.**
+-dontwarn com.google.android.gms.**

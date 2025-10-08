@@ -21,6 +21,22 @@ public class LonganVariant {
     public String getTips() { return tips; }
     public Map<String, GrowingMethod> getGrowingMethods() { return growingMethods; }
     public void setGrowingMethods(Map<String, GrowingMethod> growingMethods) { this.growingMethods = growingMethods; }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public void setProductivity(String productivity) {
+        this.productivity = productivity;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setTips(String tips) {
+        this.tips = tips;
+    }
 }
 
 

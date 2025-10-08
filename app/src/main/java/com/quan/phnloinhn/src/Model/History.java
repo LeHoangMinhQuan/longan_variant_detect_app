@@ -36,5 +36,17 @@ public class History {
     public int hashCode() {
         return Objects.hash(getVariantName(), getImageUrl(), getTimestamp());
     }
+
+    public void setVariantName(String variantName) {
+        this.variantName = variantName;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
 }
 
