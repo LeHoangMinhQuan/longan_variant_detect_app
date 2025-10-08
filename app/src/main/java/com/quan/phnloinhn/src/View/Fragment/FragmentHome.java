@@ -62,6 +62,7 @@ public class FragmentHome extends Fragment {
     private OnBackPressedCallback callback;
     private SharedViewModel viewModel;
     private ActivityResultLauncher<String> requestPermissionLauncher;
+    private ActivityResultLauncher<String> requestCameraPermissionLauncher;
     private ActivityResultLauncher<Intent> pickImageLauncher;
     private final String TAG = "FragmentHome";
     private ActivityResultLauncher<Uri> takePhotoLauncher;
@@ -165,7 +166,16 @@ public class FragmentHome extends Fragment {
                     }
                 }
         );
-
+        requestCameraPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        launchCamera();
+                    } else {
+                        Toast.makeText(requireContext(), "Cần cấp quyền camera để chụp ảnh", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
 
         // Take photo launcher (Camera)
         takePhotoLauncher = registerForActivityResult(
@@ -194,10 +204,7 @@ public class FragmentHome extends Fragment {
         // Attach contract to fabAdd
         binding.fabAdd.setOnClickListener(v -> checkGalleryPermissionAndOpen());
         // Attach contract to fabCamera
-        binding.fabCamera.setOnClickListener(v -> {
-            tempPhotoUri = createTempImageUri();
-            takePhotoLauncher.launch(tempPhotoUri);
-        });
+        binding.fabCamera.setOnClickListener(v -> checkCameraPermissionAndLaunch());
 
 //      Observe history viewing mode**
         viewModel.getIsViewingHistory().observe(getViewLifecycleOwner(), isViewing -> {
@@ -233,6 +240,21 @@ public class FragmentHome extends Fragment {
                 }
             }
         });
+    }
+
+    private void checkCameraPermissionAndLaunch() {
+        if (ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            launchCamera();
+        } else {
+            requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA);
+        }
+    }
+
+    // Extract camera launch logic to separate method:
+    private void launchCamera() {
+        tempPhotoUri = createTempImageUri();
+        takePhotoLauncher.launch(tempPhotoUri);
     }
 
     // Create URI for camera photo (compatible with FileProvider)

@@ -390,6 +390,7 @@ public class ActivityLogin extends AppCompatActivity {
     private void handleGoogleLogin() {
         // Get your Web Client ID from Firebase Console
         String webClientId = getString(R.string.default_web_client_id);
+        Log.d("OAuthCheck", "Using Web Client ID: " + webClientId);
 
         GetGoogleIdOption googleIdOption = new GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
