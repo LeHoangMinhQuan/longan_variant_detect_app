@@ -76,6 +76,7 @@
     <string name="display_name_update_failed">Failed to update display name: %1$s</string>
 
     <!-- Link email -->
+    <string name="email_title">Email Link</string>
     <string name="enter_email">Please enter email</string>
     <string name="enter_valid_email">Please enter a valid email</string>
     <string name="enter_password">Please enter password</string>

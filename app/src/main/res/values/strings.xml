@@ -75,6 +75,7 @@
     <string name="display_name_update_failed">Không thể cập nhật tên hiển thị: %1$s</string>
 
     <!-- Link email -->
+    <string name="email_title">Liên kết tài khoản</string>
     <string name="enter_email">Vui lòng nhập email</string>
     <string name="enter_valid_email">Vui lòng nhập email hợp lệ</string>
     <string name="enter_password">Vui lòng nhập mật khẩu</string>
