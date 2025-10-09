@@ -55,6 +55,7 @@
     <string name="recent_classifications">Phân loại gần đây</string>
     <string name="no_history_message">Lịch sử trống. Hãy phân loại để lưu lịch sử</string>
     <!-- Profile / User messages -->
+    <string name="password_guide">Quy tắc đặt mật khẩu?</string>
     <string name="user_not_found">Không tìm thấy người dùng. Vui lòng đăng nhập lại.</string>
     <string name="anonymous_user">Người dùng ẩn danh</string>
     <string name="no_email_linked">Chưa liên kết email</string>
@@ -107,6 +108,7 @@
     <string name="hint_confirm_new_password">Xác nhận mật khẩu mới</string>
 
     <!-- Buttons -->
+    <string name="hint_confirm_password">Xác nhận mật khẩu</string>
     <string name="btn_submit">Xác nhận</string>
 
     <!-- Content Descriptions -->
@@ -134,4 +136,6 @@
     <string name="content_desc_delete_icon">Biểu tượng xóa</string>
     <string name="content_desc_history_image">Hình ảnh mục lịch sử</string>
     <string name="content_desc_delete_button">Xóa mục lịch sử</string>
+    <string name="password_guide_message">1 Ký tự viết hoa là bắt buộc\n1 Ký tự số là bắt buộc\nCác ký tự được phép: ^ $ * . [ ] { } ( ) ? &quot; ! @ # % &amp; / \\ , &gt; &lt; ' : ; | _ ~\nĐộ dài mật khẩu tối thiểu: 8\nĐộ dài mật khẩu tối đa: 50\n</string>
+    <string name="btn_understand">Đã hiểu!</string>
 </resources>

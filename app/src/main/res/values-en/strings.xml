@@ -55,6 +55,7 @@
     <string name="recent_classifications">Recent Classifications</string>
     <string name="no_history_message">No history records yet. Start classifying!</string>
     <!-- Profile / User messages -->
+    <string name="password_guide">Password requirements?</string>
     <string name="user_not_found">User not found. Please log in again.</string>
     <string name="anonymous_user">Anonymous User</string>
     <string name="no_email_linked">No email linked</string>
@@ -106,6 +107,7 @@
     <string name="hint_confirm_new_password">Confirm New Password</string>
 
     <!-- Buttons -->
+    <string name="hint_confirm_password">Confirm Password</string>
     <string name="btn_submit">Submit</string>
 
     <!-- Content Descriptions -->
@@ -133,4 +135,7 @@
     <string name="content_desc_delete_icon">Delete icon</string>
     <string name="content_desc_history_image">History item image</string>
     <string name="content_desc_delete_button">Delete history item</string>
+    <string name="btn_understand">Got it!</string>
+    <string name="password_guide_message">1 Uppercase character required\n1 Numeric character required\nAllowed characters: ^ $ * . [ ] { } ( ) ? &quot; ! @ # % &amp; / \\ , &gt; &lt; ' : ; | _ ~\nMinimum password length: 8\nMaximum password length: 50\n</string>
+
 </resources>

@@ -1,0 +1,6 @@
+<!-- drawable/loading_dialog_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/background_white"/>
+    <corners android:radius="8dp"/>
+</shape>

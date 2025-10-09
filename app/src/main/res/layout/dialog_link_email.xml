@@ -74,6 +74,5 @@
             android:paddingVertical="12dp"
             android:text="@string/btn_submit"
             android:contentDescription="@string/link_submit_button_des" />
-
     </LinearLayout>
 </ScrollView>

@@ -9,10 +9,16 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -28,6 +34,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.quan.phnloinhn.R;
 import com.quan.phnloinhn.databinding.ActivityLoginBinding;
 import com.google.android.material.textfield.TextInputLayout;
@@ -228,7 +235,42 @@ public class ActivityLogin extends AppCompatActivity {
 
         // Guest login button
         binding.buttonLoginGuest.setOnClickListener(v -> handleGuestLogin());
+
+        // Password guid button
+        binding.passwordGuide.setOnClickListener(v -> openPasswordGuide());
     }
+
+    private void openPasswordGuide() {
+        // Inflate your custom CardView layout
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_info, null);
+
+        Button btnClose = dialogView.findViewById(R.id.btn_close);
+
+        // Build the dialog
+        AlertDialog dialog = new MaterialAlertDialogBuilder(this, R.style.Theme_PhanLoaiNhan)
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
+        // Show the dialog
+        dialog.show();
+        TextView text = dialog.findViewById(R.id.dialog_message);
+        text.setText(getString(R.string.password_guide_message).replace("\\n", "\n"));
+
+        // Make only the CardView visible (remove default background)
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(null);
+
+            // Force dialog width/height to wrap content
+            WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+            params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            dialog.getWindow().setAttributes(params);
+        }
+
+        // Close button dismisses the dialog
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+    }
+
 
     private void setupBackPressedCallback() {
         backPressedCallback = new OnBackPressedCallback(false) {
@@ -322,8 +364,9 @@ public class ActivityLogin extends AppCompatActivity {
         clearAllErrors();
         clearAllInputs();
 
-        // Show back button
-//        binding.imageButton2.setVisibility(VISIBLE);
+        // Show elements
+        binding.textInputLayoutConfirmPassword.setVisibility(VISIBLE);
+        binding.passwordGuide.setVisibility(VISIBLE);
 
         // Hide login-specific UI
         binding.buttonLoginGoogle.setVisibility(GONE);
@@ -346,8 +389,10 @@ public class ActivityLogin extends AppCompatActivity {
         clearAllErrors();
         clearAllInputs();
 
-        // Hide back button
+        // Hide elements
         binding.imageButton2.setVisibility(GONE);
+        binding.textInputLayoutConfirmPassword.setVisibility(GONE);
+        binding.passwordGuide.setVisibility(GONE);
 
         // Show all login UI elements
         binding.editTextPassword.setVisibility(VISIBLE);
@@ -370,11 +415,18 @@ public class ActivityLogin extends AppCompatActivity {
     private void handleSignUp() {
         String email = Objects.requireNonNull(binding.editTextUsername.getText()).toString().trim();
         String password = Objects.requireNonNull(binding.editTextPassword.getText()).toString().trim();
+        String confirmPassword = Objects.requireNonNull(binding.editTextConfirmpassword.getText()).toString().trim();
 
         clearAllErrors();
 
         // Validate using ViewModel
         if (viewModel.validateCredentials(email, password)) {
+            return;
+        }
+
+        // Validate confirm password
+        if(!password.equals(confirmPassword)){
+            showError(binding.textInputLayoutConfirmPassword,getString(R.string.password_not_match));
             return;
         }
 

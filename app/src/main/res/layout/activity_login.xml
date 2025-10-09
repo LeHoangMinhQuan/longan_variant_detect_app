@@ -117,7 +117,7 @@
                 app:hintAnimationEnabled="true"
                 app:hintEnabled="true"
                 app:counterEnabled="true"
-                app:counterMaxLength="15"
+                app:counterMaxLength="50"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -126,6 +126,33 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="50dp"
                     android:hint="@string/password_hint"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Confirm Password -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/textInputLayoutConfirmPassword"
+                app:startIconDrawable="@drawable/ic_lock"
+                app:endIconMode="password_toggle"
+                app:boxStrokeColor="@color/plant_green"
+                app:hintTextColor="@color/plant_green"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true"
+                app:counterEnabled="true"
+                app:counterMaxLength="50"
+                app:errorEnabled="true"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editText_confirmpassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="50dp"
+                    android:hint="@string/hint_confirm_password"
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -209,6 +236,21 @@
                 app:strokeColor="@color/grey"
                 android:paddingVertical="12dp"
                 android:layout_marginBottom="10dp"/>
+
+            <!-- Password Guide -->
+            <TextView
+                android:id="@+id/passwordGuide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/password_guide"
+                android:textColor="@color/plant_green"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:visibility="gone"/>
 
             <!-- Sign Up Button -->
             <Button
