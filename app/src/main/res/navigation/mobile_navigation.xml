@@ -8,19 +8,19 @@
     <fragment
         android:id="@+id/nav_fragmentHome"
         android:name="com.quan.phnloinhn.src.View.Fragment.FragmentHome"
-        android:label="Home"
+        android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_fragmentProfile"
         android:name="com.quan.phnloinhn.src.View.Fragment.FragmentProfile"
-        android:label="Profile"
+        android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile"/>
 
     <fragment
         android:id="@+id/nav_fragmentHistory"
         android:name="com.quan.phnloinhn.src.View.Fragment.FragmentHistory"
-        android:label="History"
+        android:label="@string/title_history"
         tools:layout="@layout/fragment_history"/>
 
 </navigation>
