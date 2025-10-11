@@ -109,6 +109,11 @@ public class SharedViewModel extends AndroidViewModel {
                 selectedVariant.postValue(variant);
                 isViewingHistory.postValue(false);
                 currentHistory.postValue(null);
+                FirebaseAuth mauth = FirebaseAuth.getInstance();
+                if (mauth.getCurrentUser() == null || mauth.getCurrentUser().isAnonymous()) {
+                    message.postValue("Bạn không thể lưu lịch sử nếu là Khách");
+                    return;
+                }
                 uploadImage(imageUri, variantName);
             }
         } else {

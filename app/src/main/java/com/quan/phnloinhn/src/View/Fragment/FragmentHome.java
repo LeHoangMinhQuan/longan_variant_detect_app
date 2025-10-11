@@ -135,7 +135,7 @@ public class FragmentHome extends Fragment {
                     if (isGranted) {
                         openGallery();
                     } else {
-                        Toast.makeText(requireContext(), "Cần cấp quyền để chọn ảnh", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Cần cấp quyền để sử dụng tính năng này", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
