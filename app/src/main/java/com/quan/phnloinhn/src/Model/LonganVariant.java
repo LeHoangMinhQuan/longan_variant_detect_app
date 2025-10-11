@@ -14,7 +14,6 @@ public class LonganVariant {
     // Getters & setters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-
     public String getOrigin() { return origin; }
     public String getProductivity() { return productivity; }
     public String getDescription() { return description; }

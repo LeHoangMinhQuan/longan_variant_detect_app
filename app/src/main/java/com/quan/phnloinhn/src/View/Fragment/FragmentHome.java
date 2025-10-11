@@ -30,6 +30,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -426,10 +427,25 @@ public class FragmentHome extends Fragment {
         // Set plant info
         binding.plantNameTitle.setText(variant.getName());
         binding.plantImage.setImageResource(getImageResourceByName(variant.getName()));
-        binding.plantOrigin.setText(variant.getOrigin());
-        binding.plantProductivity.setText(variant.getProductivity());
-        binding.plantDescription.setText(variant.getDescription());
-        binding.plantTips.setText(variant.getTips());
+        binding.plantOrigin.setText(
+                String.join(": ", getString(R.string.variant_origin),
+                        TextUtils.isEmpty(variant.getOrigin()) ? "-" : variant.getOrigin())
+        );
+        binding.plantProductivity.setText(
+                String.join(": ", getString(R.string.variant_productivity),
+                        TextUtils.isEmpty(variant.getProductivity()) ? "-" : variant.getProductivity())
+        );
+
+        binding.plantDescription.setText(
+                String.join(": ", getString(R.string.variant_description),
+                        TextUtils.isEmpty(variant.getDescription()) ? "-" : variant.getDescription())
+        );
+
+        binding.plantTips.setText(
+                String.join(": ", getString(R.string.variant_tips),
+                        TextUtils.isEmpty(variant.getTips()) ? "-" : variant.getTips())
+        );
+
 
         // Growing Methods
         if (variant.getGrowingMethods() != null && !variant.getGrowingMethods().isEmpty()) {
@@ -445,14 +461,46 @@ public class FragmentHome extends Fragment {
             setVisible(binding.soil, binding.img11, true);
             setVisible(binding.other, binding.img12, true);
 
-            binding.branchPruning.setText(method.getBranch_pruning());
-            binding.fertilizer.setText(method.getFertilizer());
-            binding.fruitPruning.setText(method.getFruit_pruning());
-            binding.pesticide.setText(method.getPesticide());
-            binding.plantDistance.setText(method.getPlant_distance());
-            binding.plantTime.setText(method.getPlant_time());
-            binding.soil.setText(method.getSoil());
-            binding.other.setText(method.getOther());
+            binding.branchPruning.setText(
+                    String.join(": ", getString(R.string.growing_branch_pruning),
+                            TextUtils.isEmpty(method.getBranch_pruning()) ? "-" : method.getBranch_pruning())
+            );
+
+            binding.fertilizer.setText(
+                    String.join(": ", getString(R.string.growing_fertilizer),
+                            TextUtils.isEmpty(method.getFertilizer()) ? "-" : method.getFertilizer())
+            );
+
+            binding.fruitPruning.setText(
+                    String.join(": ", getString(R.string.growing_fruit_pruning),
+                            TextUtils.isEmpty(method.getFruit_pruning()) ? "-" : method.getFruit_pruning())
+            );
+
+            binding.pesticide.setText(
+                    String.join(": ", getString(R.string.growing_pesticide),
+                            TextUtils.isEmpty(method.getPesticide()) ? "-" : method.getPesticide())
+            );
+
+            binding.plantDistance.setText(
+                    String.join(": ", getString(R.string.growing_plant_distance),
+                            TextUtils.isEmpty(method.getPlant_distance()) ? "-" : method.getPlant_distance())
+            );
+
+            binding.plantTime.setText(
+                    String.join(": ", getString(R.string.growing_plant_time),
+                            TextUtils.isEmpty(method.getPlant_time()) ? "-" : method.getPlant_time())
+            );
+
+            binding.soil.setText(
+                    String.join(": ", getString(R.string.growing_soil),
+                            TextUtils.isEmpty(method.getSoil()) ? "-" : method.getSoil())
+            );
+
+            binding.other.setText(
+                    String.join(": ", getString(R.string.growing_other),
+                            TextUtils.isEmpty(method.getOther()) ? "-" : method.getOther())
+            );
+
         }
     }
 
