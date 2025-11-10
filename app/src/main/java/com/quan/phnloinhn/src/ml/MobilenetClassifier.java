@@ -116,7 +116,7 @@ public class MobilenetClassifier {
 
         bitmap = Bitmap.createScaledBitmap(bitmap, inputSize, inputSize, false);
 
-        // Mỗi pixel có 3 kênh (RGB), mỗi kênh 1 byte => uint8
+
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * inputSize * inputSize * 3);
         byteBuffer.order(ByteOrder.nativeOrder());
 
@@ -133,9 +133,9 @@ public class MobilenetClassifier {
                 int g = (input >> 8) & 0xFF;
                 int b = input & 0xFF;
 
-                byteBuffer.put((byte) r);
-                byteBuffer.put((byte) g);
-                byteBuffer.put((byte) b);
+                byteBuffer.putFloat(r);
+                byteBuffer.putFloat(g);
+                byteBuffer.putFloat(b);
             }
         }
         return byteBuffer;

@@ -11,8 +11,8 @@ android {
         applicationId = "com.quan.phnloinhn"
         minSdk = 24
         targetSdk = 35
-        versionCode = 9
-        versionName = "1.0.7-bug-fixes"
+        versionCode = 11
+        versionName = "1.1.0 - closed test"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
