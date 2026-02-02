@@ -1,3 +1,5 @@
+# Acknowledgements: This research is part of Can Tho University’s scientific research program and be funded under the code THS2025-79.
+
 # Longan Cultivar Variant Detection App for Android
 This repo is in scope of my university scientific research, which consists of Classification Models Training and App Integration, to create an Android app with Java for orchid owners use. The training pipeline was set up on Google Colab environment, using Tensorflow + Keras then apply quantization to generate a Tensorflow Lite model with input type uint8. The model then be integrated to this app using Tensorflow Lite library.
 
